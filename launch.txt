@@ -1,0 +1,14 @@
+##This is the file which will configure all of the settings for launch
+##Place all of you classes which will register a manager here
+##All classes placed here must implement cjminecraft.util.ILaunchClass
+cjminecraft.engine.Engine
+##Do not edit above this line, add classes below
+
+##Launch Options
+##Below are all of the options which will be used once the game has booted up
+width:1280
+height:720
+resizable:false
+title:#format(window.title)
+language_path:assets/lang
+language_file_type:.txt
