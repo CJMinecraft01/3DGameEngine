@@ -5,9 +5,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
@@ -15,10 +12,20 @@ import org.lwjgl.system.MemoryStack;
 import cjminecraft.engine.Engine;
 import cjminecraft.engine.util.IManager;
 
+/**
+ * The window manager, handling everything to do with the window. The width,
+ * height and title is loaded from {@link Engine#LAUNCH_PATH_FILE}
+ * 
+ * @author CJMinecraft
+ *
+ */
 public class WindowManager implements IManager {
 
+	/**
+	 * The instance of the manager
+	 */
 	private static WindowManager instance = new WindowManager();
-	
+
 	private long windowId;
 	private String title;
 	private int width, height;
@@ -27,20 +34,8 @@ public class WindowManager implements IManager {
 	public void preInit() throws Exception {
 		this.width = Integer.valueOf(Engine.getInstance().getOption("width"));
 		this.height = Integer.valueOf(Engine.getInstance().getOption("height"));
-		String title = Engine.getInstance().getOption("title");
-		if(title.contains("#format")) {
-			title = title.substring("#format".length() + 1); //Remove first bracket
-			title = title.substring(0, title.length() - 1); //Remove last bracket
-			String[] details = title.split(",");
-			List<Object> args = new ArrayList<Object>();
-			for(String obj : details)
-				args.add(obj);
-			args.remove(0);
-			this.title = LanguageManager.getInstance().format(details[0], args.toArray());
-		} else {
-			this.title = title;
-		}
-		
+		this.title = Engine.getInstance().getOption("title");
+
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		if (!glfwInit())
@@ -50,7 +45,7 @@ public class WindowManager implements IManager {
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE,
 				Boolean.valueOf(Engine.getInstance().getOption("resizable")) ? GLFW_TRUE : GLFW_FALSE);
-		
+
 		this.windowId = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 		if (this.windowId == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
@@ -71,10 +66,12 @@ public class WindowManager implements IManager {
 	}
 
 	@Override
-	public void init() throws Exception {}
+	public void init() throws Exception {
+	}
 
 	@Override
-	public void postInit() throws Exception {}
+	public void postInit() throws Exception {
+	}
 
 	@Override
 	public void loop() throws Exception {
@@ -82,20 +79,35 @@ public class WindowManager implements IManager {
 	}
 
 	@Override
-	public void cleanUp() throws Exception {}
-	
+	public void cleanUp() throws Exception {
+	}
+
+	/**
+	 * @return the initial width of the window. TODO make the width update when
+	 *         requested
+	 */
 	public int getWidth() {
 		return width;
 	}
-	
+
+	/**
+	 * @return the initial height of the window. TODO make the height update when
+	 *         requested
+	 */
 	public int getHeight() {
 		return height;
 	}
-	
+
+	/**
+	 * @return the id of the {@link GLFW} window
+	 */
 	public long getWindowId() {
 		return windowId;
 	}
-	
+
+	/**
+	 * @return the instance of the window manager
+	 */
 	public static WindowManager getInstance() {
 		return instance;
 	}

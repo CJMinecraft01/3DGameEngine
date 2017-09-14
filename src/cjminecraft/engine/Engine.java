@@ -9,7 +9,7 @@ import java.util.*;
 import javax.lang.model.SourceVersion;
 import org.lwjgl.Version;
 
-import cjminecraft.engine.managers.LanguageManager;
+import cjminecraft.engine.loaders.LanguageLoader;
 import cjminecraft.engine.managers.WindowManager;
 import cjminecraft.engine.util.ILaunchClass;
 import cjminecraft.engine.util.IManager;
@@ -25,7 +25,7 @@ import cjminecraft.engine.util.IManager;
  *
  */
 public class Engine implements IManager, ILaunchClass {
-	
+
 	/**
 	 * The directory of the launch fill. Without this, the game will not work
 	 */
@@ -45,7 +45,9 @@ public class Engine implements IManager, ILaunchClass {
 	 *             Allow any exception to be thrown
 	 */
 	public static void main(String[] args) throws Exception {
+		LanguageLoader.loadLanguage("en_UK"); //Load the boot up language
 		System.out.println("LWJGL Version: " + Version.getVersion());
+		//Load the launch file
 		for (String line : Files.readAllLines(Paths.get(LAUNCH_PATH_FILE))) {
 			if (!line.startsWith("##") && !line.isEmpty()) {
 				if (SourceVersion.isName(line) && !SourceVersion.isKeyword(line)) {
@@ -58,9 +60,19 @@ public class Engine implements IManager, ILaunchClass {
 					String[] details = line.split(":");
 					if (details.length < 2)
 						continue;
-					instance.options.put(details[0], line.substring(details[0].length() + 1));
-					System.out.println(String.format("Loading option: %s = %s", details[0],
-							line.substring(details[0].length() + 1)));
+					String value = line.substring(details[0].length() + 1);
+					if (value.contains("#format")) {
+						value = value.substring("#format".length() + 1);
+						value = value.substring(0, value.length() - 1);
+						String[] formatArgs = value.split(",");
+						List<Object> formatArgsList = new ArrayList<Object>();
+						for (String arg : formatArgs)
+							formatArgsList.add(arg);
+						formatArgsList.remove(0);
+						value = LanguageLoader.format(formatArgs[0], formatArgsList.toArray());
+					}
+					instance.options.put(details[0], value);
+					System.out.println(String.format("Loading option: %s = %s", details[0], value));
 				}
 			}
 		}
@@ -74,7 +86,8 @@ public class Engine implements IManager, ILaunchClass {
 	@Override
 	public void addManagers() {
 		System.out.println("Adding Managers");
-		addManager(LanguageManager.getInstance());
+		// addManager(LanguageManager.getInstance()); REMOVED use the
+		// LanguageLoader class now
 		addManager(WindowManager.getInstance());
 	}
 

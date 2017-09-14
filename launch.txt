@@ -10,5 +10,3 @@ width:1280
 height:720
 resizable:false
 title:#format(window.title)
-language_path:assets/lang
-language_file_type:.txt
