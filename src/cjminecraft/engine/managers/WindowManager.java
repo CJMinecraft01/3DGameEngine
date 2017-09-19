@@ -32,9 +32,9 @@ public class WindowManager implements IManager {
 
 	@Override
 	public void preInit() throws Exception {
-		this.width = Integer.valueOf(Engine.getInstance().getOption("width"));
-		this.height = Integer.valueOf(Engine.getInstance().getOption("height"));
-		this.title = Engine.getInstance().getOption("title");
+		this.width = Integer.valueOf(Engine.getOption("width"));
+		this.height = Integer.valueOf(Engine.getOption("height"));
+		this.title = Engine.getOption("title");
 
 		GLFWErrorCallback.createPrint(System.err).set();
 
@@ -44,7 +44,7 @@ public class WindowManager implements IManager {
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE,
-				Boolean.valueOf(Engine.getInstance().getOption("resizable")) ? GLFW_TRUE : GLFW_FALSE);
+				Boolean.valueOf(Engine.getOption("resizable")) ? GLFW_TRUE : GLFW_FALSE);
 
 		this.windowId = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 		if (this.windowId == NULL)

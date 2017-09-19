@@ -61,7 +61,7 @@ public class Engine implements IManager, ILaunchClass {
 					if (details.length < 2)
 						continue;
 					String value = line.substring(details[0].length() + 1);
-					if (value.contains("#format")) {
+					if (value.contains("#format")) { //Format
 						value = value.substring("#format".length() + 1);
 						value = value.substring(0, value.length() - 1);
 						String[] formatArgs = value.split(",");
@@ -86,8 +86,6 @@ public class Engine implements IManager, ILaunchClass {
 	@Override
 	public void addManagers() {
 		System.out.println("Adding Managers");
-		// addManager(LanguageManager.getInstance()); REMOVED use the
-		// LanguageLoader class now
 		addManager(WindowManager.getInstance());
 	}
 
@@ -158,8 +156,12 @@ public class Engine implements IManager, ILaunchClass {
 	 *            The name of the variable to get the value of
 	 * @return The value of the launch option
 	 */
-	public String getOption(String key) {
-		return this.options.getOrDefault(key, "");
+	public static String getOption(String key) {
+		if(!instance.options.containsKey(key)) {
+			System.out.println("Cannot find key in launch file: " + key);
+			System.exit(-1);
+		}
+		return instance.options.getOrDefault(key, "");
 	}
 
 	/**
