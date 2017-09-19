@@ -10,6 +10,8 @@ import javax.lang.model.SourceVersion;
 import org.lwjgl.Version;
 
 import cjminecraft.engine.loaders.LanguageLoader;
+import cjminecraft.engine.loaders.TextureLoader;
+import cjminecraft.engine.loaders.VaoLoader;
 import cjminecraft.engine.managers.WindowManager;
 import cjminecraft.engine.util.ILaunchClass;
 import cjminecraft.engine.util.IManager;
@@ -131,6 +133,8 @@ public class Engine implements IManager, ILaunchClass {
 			System.out.println(manager.getClass().getSimpleName() + " clean up");
 			manager.cleanUp();
 		}
+		VaoLoader.cleanUp();
+		TextureLoader.cleanUp();
 		glfwFreeCallbacks(WindowManager.getInstance().getWindowId());
 		glfwDestroyWindow(WindowManager.getInstance().getWindowId());
 		glfwTerminate();

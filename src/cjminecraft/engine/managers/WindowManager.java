@@ -43,8 +43,7 @@ public class WindowManager implements IManager {
 
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-		glfwWindowHint(GLFW_RESIZABLE,
-				Boolean.valueOf(Engine.getOption("resizable")) ? GLFW_TRUE : GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, Boolean.valueOf(Engine.getOption("resizable")) ? GLFW_TRUE : GLFW_FALSE);
 
 		this.windowId = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 		if (this.windowId == NULL)
@@ -91,8 +90,8 @@ public class WindowManager implements IManager {
 	}
 
 	/**
-	 * @return the initial height of the window. TODO make the height update when
-	 *         requested
+	 * @return the initial height of the window. TODO make the height update
+	 *         when requested
 	 */
 	public int getHeight() {
 		return height;

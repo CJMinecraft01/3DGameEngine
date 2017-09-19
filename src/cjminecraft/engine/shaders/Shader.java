@@ -24,7 +24,12 @@ public abstract class Shader {
 		for (ShaderType type : ShaderType.values()) {
 			try {
 				String filePath = "/" + Class.forName(new Exception().getStackTrace()[1].getClassName()).getPackage()
-						.getName().replace(".", "/") + "/" + (shaderPrefix.isEmpty() ? type.getName() : shaderPrefix + type.getName().substring(0, 1).toUpperCase() + type.getName().substring(1)) + ".glsl";
+						.getName().replace(".", "/")
+						+ "/"
+						+ (shaderPrefix.isEmpty() ? type.getName()
+								: shaderPrefix + type.getName().substring(0, 1).toUpperCase()
+										+ type.getName().substring(1))
+						+ ".glsl";
 				if (Class.class.getResourceAsStream(filePath) != null) {
 					this.shaders.put(type, loadShader(filePath, type.getType()));
 					System.out.println(new Exception().getStackTrace()[1].getClassName().substring(37)

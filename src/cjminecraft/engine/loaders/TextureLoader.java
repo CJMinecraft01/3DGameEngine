@@ -20,13 +20,41 @@ import org.lwjgl.opengl.GL;
 
 import cjminecraft.engine.Engine;
 
+/**
+ * The loader for all your textures
+ * 
+ * @author CJMinecraft
+ *
+ */
 public class TextureLoader {
 
+	/**
+	 * The number of bytes of data per pixel. 4 because we use RGBA
+	 */
 	public static final int BYTES_PER_PIXEL = 4;
 
+	/**
+	 * A cache of textures to be removed at the closing of the game
+	 */
 	private static List<Integer> textures = new ArrayList<Integer>();
 
-	private static int loadTexture(BufferedImage image) {
+	/**
+	 * Delete all the textures from the memory
+	 */
+	public static void cleanUp() {
+		for (int texture : textures)
+			glDeleteTextures(texture);
+	}
+
+	/**
+	 * Load the given image
+	 * 
+	 * @param image
+	 *            The image to load. Also works well with
+	 *            {@link BufferedImage#getSubimage(int, int, int, int)}
+	 * @return The texture id for use with rendering
+	 */
+	public static int loadTexture(BufferedImage image) {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL);
@@ -62,18 +90,69 @@ public class TextureLoader {
 		return textureId;
 	}
 
+	/**
+	 * Load a texture. <strong>Ensure that your launch file contains the option
+	 * <code>textures.location</code> as this is the place to start looking for
+	 * textures.</strong>. All images must be in the .png format (<i>This is
+	 * already added onto the file name for you</i>)
+	 * 
+	 * @param fileName
+	 *            The location to the texture file. This will be in the folder
+	 *            from your launch options
+	 * @param x
+	 *            The u location of the texture to start getting the image from
+	 * @param y
+	 *            The v location of the texture to start getting the image from
+	 * @param width
+	 *            The width of the texture (to stop getting it from)
+	 * @param height
+	 *            The width of the texture (to stop getting it from)
+	 * @return The texture id for use with rendering
+	 * @throws IOException
+	 *             If the texture is not able to be read
+	 */
 	public static int loadTexture(String fileName, int x, int y, int width, int height) throws IOException {
 		BufferedImage texture = ImageIO.read(new File(Engine.getOption("textures.location") + "/" + fileName + ".png"));
 		return loadTexture(texture.getSubimage(x, y, width, height));
 	}
 
+	/**
+	 * Load a texture. <strong>Ensure that your launch file contains the option
+	 * <code>textures.location</code> as this is the place to start looking for
+	 * textures.</strong>. All images must be in the .png format (<i>This is
+	 * already added onto the file name for you</i>)
+	 * 
+	 * @param fileName
+	 *            The location to the texture file. This will be in the folder
+	 *            from your launch options
+	 * @param x
+	 *            The u location of the texture to start getting the image from
+	 * @param y
+	 *            The v location of the texture to start getting the image from
+	 * @return The texture id for use with rendering
+	 * @throws IOException
+	 *             If the texture is not able to be read
+	 */
 	public static int loadTexture(String fileName, int x, int y) throws IOException {
 		BufferedImage texture = ImageIO.read(new File(Engine.getOption("textures.location") + "/" + fileName + ".png"));
 		return loadTexture(texture.getSubimage(x, y, texture.getWidth() - x, texture.getHeight() - y));
 	}
-	
+
+	/**
+	 * Load a texture. <strong>Ensure that your launch file contains the option
+	 * <code>textures.location</code> as this is the place to start looking for
+	 * textures.</strong>. All images must be in the .png format (<i>This is
+	 * already added onto the file name for you</i>)
+	 * 
+	 * @param fileName
+	 *            The location to the texture file. This will be in the folder
+	 *            from your launch options
+	 * @return The texture id for use with rendering
+	 * @throws IOException
+	 *             If the texture is not able to be read
+	 */
 	public static int loadTexture(String fileName) throws IOException {
-		return loadTexture(ImageIO.read(new File(Engine.getOption("textures.location") +"/" + fileName + ".png")));
+		return loadTexture(ImageIO.read(new File(Engine.getOption("textures.location") + "/" + fileName + ".png")));
 	}
 
 }
