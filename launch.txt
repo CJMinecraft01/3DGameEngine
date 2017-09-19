@@ -10,3 +10,4 @@ width:1280
 height:720
 resizable:false
 title:#format(window.title)
+textures.location=assets/textures
