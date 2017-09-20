@@ -8,21 +8,50 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+/**
+ * Represents a uniform variable in a shader file
+ * 
+ * @author CJMinecraft
+ *
+ */
 public class UniformVariable {
 
 	private String name;
 	private int id;
 
+	/**
+	 * Initialise a new uniform variable with the given name. Be sure to link
+	 * the program using {@link #linkToProgram(int)}
+	 * 
+	 * @param name
+	 *            The name of the uniform variable
+	 */
 	protected UniformVariable(String name) {
 		this.name = name;
 	}
-	
+
+	/**
+	 * Initialise a new uniform variable with the given name. The uniform
+	 * variable is automatically linked to the program id
+	 * 
+	 * @param name
+	 *            The name of the uniform variable
+	 * @param programId
+	 *            The id of the shader program
+	 */
 	protected UniformVariable(String name, int programId) {
 		this.name = name;
-		linkVariableToProgram(programId);
+		linkToProgram(programId);
 	}
 
-	public UniformVariable linkVariableToProgram(int programId) {
+	/**
+	 * Link the uniform variable to the correct shader program
+	 * 
+	 * @param programId
+	 *            The id of the shader program
+	 * @return The updated uniform variable
+	 */
+	public UniformVariable linkToProgram(int programId) {
 		this.id = glGetUniformLocation(programId, this.name);
 		return this;
 	}
@@ -71,10 +100,16 @@ public class UniformVariable {
 		return this;
 	}
 
+	/**
+	 * @return the location of the uniform variable in the shader program
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @return the name of the uniform variable
+	 */
 	public String getName() {
 		return name;
 	}
