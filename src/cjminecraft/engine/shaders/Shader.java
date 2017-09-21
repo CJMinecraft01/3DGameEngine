@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import cjminecraft.engine.shaders.uniforms.UniformVariable;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
@@ -45,6 +47,7 @@ public abstract class Shader {
 	 *            The prefix before the name of the shader
 	 */
 	public Shader(String shaderPrefix) {
+		this.programId = glCreateProgram();
 		for (ShaderType type : ShaderType.values()) {
 			try {
 				String filePath = "/"
@@ -64,14 +67,17 @@ public abstract class Shader {
 				e.printStackTrace();
 			}
 		}
-		this.programId = glCreateProgram();
 		Iterator<Entry<ShaderType, Integer>> iterator = this.shaders.entrySet().iterator();
 		while (iterator.hasNext())
 			glAttachShader(this.programId, iterator.next().getValue());
 		bindAttributes();
 		glLinkProgram(this.programId);
-		glValidateProgram(this.programId);
-		getAllUniformLocations();
+		iterator = this.shaders.entrySet().iterator();
+		while (iterator.hasNext()) {
+			int id = iterator.next().getValue();
+			glDetachShader(this.programId, id);
+			glDeleteShader(id);
+		}
 	}
 
 	/**
@@ -80,20 +86,18 @@ public abstract class Shader {
 	protected abstract void bindAttributes();
 
 	/**
-	 * Initialise all of the uniform variables. Use
-	 * {@link #getUniformVariable(String)}
+	 * Initialise all of the uniform variables
 	 */
 	protected abstract void getAllUniformLocations();
-
-	/**
-	 * Used to initialise a new {@link UniformVariable}
-	 * 
-	 * @param name
-	 *            The name of the uniform variable
-	 * @return The uniform variable, linked to the shader program
-	 */
-	protected UniformVariable getUniformVariable(String name) {
-		return new UniformVariable(name, this.programId);
+	
+	protected void storeAllUniformLocations(UniformVariable<?>... variables) {
+		storeSomeUniformLocations(variables);
+		glValidateProgram(this.programId);
+	}
+	
+	protected void storeSomeUniformLocations(UniformVariable<?>... variables) {
+		for(UniformVariable<?> variable : variables)
+			variable.linkToProgram(this.programId);
 	}
 
 	/**
@@ -115,12 +119,6 @@ public abstract class Shader {
 	 */
 	public void cleanUp() {
 		stop();
-		Iterator<Entry<ShaderType, Integer>> iterator = this.shaders.entrySet().iterator();
-		while (iterator.hasNext()) {
-			int id = iterator.next().getValue();
-			glDetachShader(this.programId, id);
-			glDeleteShader(id);
-		}
 		glDeleteProgram(this.programId);
 	}
 
