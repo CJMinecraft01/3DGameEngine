@@ -84,11 +84,11 @@ public abstract class Shader {
 	 * Bind all of the attributes (i.e. all of the in variables)
 	 */
 	protected abstract void bindAttributes();
-
-	/**
-	 * Initialise all of the uniform variables
-	 */
-	protected abstract void getAllUniformLocations();
+	
+	protected void bindAttributes(String... attributes) {
+		for(int i = 0; i < attributes.length; i++)
+			glBindAttribLocation(this.programId, i, attributes[i]);
+	}
 	
 	protected void storeAllUniformLocations(UniformVariable<?>... variables) {
 		storeSomeUniformLocations(variables);
@@ -156,10 +156,6 @@ public abstract class Shader {
 			System.exit(-1);
 		}
 		return shaderID;
-	}
-
-	protected void bindAttribute(int attribute, String variableName) {
-		glBindAttribLocation(this.programId, attribute, variableName);
 	}
 
 }
