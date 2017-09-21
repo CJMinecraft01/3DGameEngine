@@ -32,8 +32,8 @@ public abstract class Shader {
 	 * the name of the shader with the file extension of .glsl <br>
 	 * Example: <code>fragment.glsl</code>
 	 */
-	public Shader() {
-		this("");
+	public Shader(String... attributes) {
+		this("", attributes);
 	}
 
 	/**
@@ -46,7 +46,7 @@ public abstract class Shader {
 	 * @param shaderPrefix
 	 *            The prefix before the name of the shader
 	 */
-	public Shader(String shaderPrefix) {
+	public Shader(String shaderPrefix, String... attributes) {
 		this.programId = glCreateProgram();
 		for (ShaderType type : ShaderType.values()) {
 			try {
@@ -70,7 +70,7 @@ public abstract class Shader {
 		Iterator<Entry<ShaderType, Integer>> iterator = this.shaders.entrySet().iterator();
 		while (iterator.hasNext())
 			glAttachShader(this.programId, iterator.next().getValue());
-		bindAttributes();
+		bindAttributes(attributes);
 		glLinkProgram(this.programId);
 		iterator = this.shaders.entrySet().iterator();
 		while (iterator.hasNext()) {
@@ -79,11 +79,6 @@ public abstract class Shader {
 			glDeleteShader(id);
 		}
 	}
-
-	/**
-	 * Bind all of the attributes (i.e. all of the in variables)
-	 */
-	protected abstract void bindAttributes();
 	
 	protected void bindAttributes(String... attributes) {
 		for(int i = 0; i < attributes.length; i++)
