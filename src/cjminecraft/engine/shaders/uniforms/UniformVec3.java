@@ -4,8 +4,15 @@ import static org.lwjgl.opengl.GL20.glUniform3f;
 
 import org.joml.Vector3f;
 
+/**
+ * Represents a uniform variable in a shader file which has a {@link Vector3f}
+ * value
+ * 
+ * @author CJMinecraft
+ *
+ */
 public class UniformVec3 extends UniformVariable<Vector3f> {
-	
+
 	/**
 	 * Initialise a new uniform variable with the given name. Be sure to link
 	 * the program using {@link #linkToProgram(int)}

@@ -2,6 +2,12 @@ package cjminecraft.engine.shaders.uniforms;
 
 import static org.lwjgl.opengl.GL20.glUniform1i;
 
+/**
+ * Represents a uniform variable in a shader file which has an integer value
+ * 
+ * @author CJMinecraft
+ *
+ */
 public class UniformInt extends UniformVariable<Integer> {
 	
 	/**

@@ -4,8 +4,15 @@ import static org.lwjgl.opengl.GL20.glUniformMatrix3fv;
 
 import org.joml.Matrix3f;
 
+/**
+ * Represents a uniform variable in a shader file which has a {@link Matrix3f}
+ * value
+ * 
+ * @author CJMinecraft
+ *
+ */
 public class UniformMat3 extends UniformVariable<Matrix3f> {
-	
+
 	/**
 	 * Initialise a new uniform variable with the given name. Be sure to link
 	 * the program using {@link #linkToProgram(int)}

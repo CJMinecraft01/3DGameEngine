@@ -79,20 +79,47 @@ public abstract class Shader {
 			glDeleteShader(id);
 		}
 	}
-	
+
+	/**
+	 * Bind all of the attrubtes to the shader program
+	 * 
+	 * @param attributes
+	 *            The name of all the attributes
+	 */
 	protected void bindAttributes(String... attributes) {
-		for(int i = 0; i < attributes.length; i++)
+		for (int i = 0; i < attributes.length; i++)
 			glBindAttribLocation(this.programId, i, attributes[i]);
 	}
-	
+
+	/**
+	 * Store all of the uniform variables, ensuring to then validate the program
+	 * afterwards
+	 * 
+	 * @param variables
+	 *            The uniform variables
+	 */
 	protected void storeAllUniformLocations(UniformVariable<?>... variables) {
 		storeSomeUniformLocations(variables);
 		glValidateProgram(this.programId);
 	}
-	
+
+	/**
+	 * Store all of the uniform variables. Make sure to validate the program
+	 * once all uniform locations are stored
+	 * 
+	 * @param variables
+	 *            The uniform variables
+	 */
 	protected void storeSomeUniformLocations(UniformVariable<?>... variables) {
-		for(UniformVariable<?> variable : variables)
+		for (UniformVariable<?> variable : variables)
 			variable.linkToProgram(this.programId);
+	}
+
+	/**
+	 * Validate the program, saying it is ready to be used
+	 */
+	protected void validateProgram() {
+		glValidateProgram(this.programId);
 	}
 
 	/**
