@@ -2,6 +2,9 @@
 .settings*
 *.classpath
 *.project
+bin/*
+
+builds/*
 
 # Compiled class file
 *.class
