@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import cjminecraft.engine.util.objects.RawObject;
+import cjminecraft.engine.objects.data.VertexData;
 
 /**
  * The loader for Vertex Array Objects (VAOs) and Vertex Buffer Objects (VBOs)
@@ -101,13 +101,13 @@ public class VaoLoader {
 	 *            The dimensions of the positions (<i>E.g. a world position
 	 *            would be an example of a 3D array so 3 but a 2D screen
 	 *            position would be 2</i>
-	 * @return The {@link RawObject} containing all the vertex information
+	 * @return The {@link VertexData} containing all the vertex information
 	 */
-	public static RawObject loadToVAO(float[] positions, int dimensions) {
+	public static VertexData loadToVAO(float[] positions, int dimensions) {
 		int vaoId = createVAO();
 		storeDataInAttributeList(0, dimensions, positions);
 		unbindVAO();
-		return new RawObject(vaoId, positions.length / dimensions);
+		return new VertexData(vaoId, positions.length / dimensions);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class VaoLoader {
 	 *            The positions to load (Stored in position 0)
 	 * @param textureCoords
 	 *            The texture coordinates to load (Stored in position 1)
-	 * @return The {@link RawObject} containing all the vertex information
+	 * @return The {@link VertexData} containing all the vertex information
 	 */
 	public static int loadToVAO(float[] positions, float[] textureCoords) {
 		int vaoId = createVAO();
@@ -138,16 +138,16 @@ public class VaoLoader {
 	 *            The normals to load (Stored in position 2)
 	 * @param indices
 	 *            The indices to load
-	 * @return The {@link RawObject} containing all the vertex information
+	 * @return The {@link VertexData} containing all the vertex information
 	 */
-	public static RawObject loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
+	public static VertexData loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
 		int vaoId = createVAO();
 		bindIndicesBuffer(indices);
 		storeDataInAttributeList(0, 3, positions);
 		storeDataInAttributeList(1, 2, textureCoords);
 		storeDataInAttributeList(2, 3, normals);
 		unbindVAO();
-		return new RawObject(vaoId, indices.length);
+		return new VertexData(vaoId, indices.length);
 	}
 
 	/**
@@ -164,9 +164,9 @@ public class VaoLoader {
 	 *            The tangents to load (Stored in position 3)
 	 * @param indices
 	 *            The indices to load
-	 * @return The {@link RawObject} containing all the vertex information
+	 * @return The {@link VertexData} containing all the vertex information
 	 */
-	public static RawObject loadToVAO(float[] positions, float[] textureCoords, float[] normals, float[] tangents,
+	public static VertexData loadToVAO(float[] positions, float[] textureCoords, float[] normals, float[] tangents,
 			int[] indices) {
 		int vaoID = createVAO();
 		bindIndicesBuffer(indices);
@@ -175,7 +175,7 @@ public class VaoLoader {
 		storeDataInAttributeList(2, 3, normals);
 		storeDataInAttributeList(3, 3, tangents);
 		unbindVAO();
-		return new RawObject(vaoID, indices.length);
+		return new VertexData(vaoID, indices.length);
 	}
 
 	/**

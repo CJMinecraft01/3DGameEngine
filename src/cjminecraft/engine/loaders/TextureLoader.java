@@ -99,9 +99,9 @@ public class TextureLoader {
 	 * @param fileName
 	 *            The location to the texture file. This will be in the folder
 	 *            from your launch options
-	 * @param x
+	 * @param u
 	 *            The u location of the texture to start getting the image from
-	 * @param y
+	 * @param v
 	 *            The v location of the texture to start getting the image from
 	 * @param width
 	 *            The width of the texture (to stop getting it from)
@@ -111,9 +111,9 @@ public class TextureLoader {
 	 * @throws IOException
 	 *             If the texture is not able to be read
 	 */
-	public static int loadTexture(String fileName, int x, int y, int width, int height) throws IOException {
+	public static int loadTexture(String fileName, int u, int v, int width, int height) throws IOException {
 		BufferedImage texture = ImageIO.read(new File(Engine.getOption("textures.location") + "/" + fileName + ".png"));
-		return loadTexture(texture.getSubimage(x, y, width, height));
+		return loadTexture(texture.getSubimage(u, v, width, height));
 	}
 
 	/**
@@ -125,17 +125,17 @@ public class TextureLoader {
 	 * @param fileName
 	 *            The location to the texture file. This will be in the folder
 	 *            from your launch options
-	 * @param x
+	 * @param u
 	 *            The u location of the texture to start getting the image from
-	 * @param y
+	 * @param v
 	 *            The v location of the texture to start getting the image from
 	 * @return The texture id for use with rendering
 	 * @throws IOException
 	 *             If the texture is not able to be read
 	 */
-	public static int loadTexture(String fileName, int x, int y) throws IOException {
+	public static int loadTexture(String fileName, int u, int v) throws IOException {
 		BufferedImage texture = ImageIO.read(new File(Engine.getOption("textures.location") + "/" + fileName + ".png"));
-		return loadTexture(texture.getSubimage(x, y, texture.getWidth() - x, texture.getHeight() - y));
+		return loadTexture(texture.getSubimage(u, v, texture.getWidth() - u, texture.getHeight() - v));
 	}
 
 	/**

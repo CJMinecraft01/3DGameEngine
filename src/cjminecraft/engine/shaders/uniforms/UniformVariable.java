@@ -25,20 +25,6 @@ public abstract class UniformVariable<T> {
 	}
 
 	/**
-	 * Initialise a new uniform variable with the given name. The uniform
-	 * variable is automatically linked to the program id
-	 * 
-	 * @param name
-	 *            The name of the uniform variable
-	 * @param programId
-	 *            The id of the shader program
-	 */
-	public UniformVariable(String name, int programId) {
-		this.name = name;
-		linkToProgram(programId);
-	}
-
-	/**
 	 * Link the uniform variable to the correct shader program
 	 * 
 	 * @param programId

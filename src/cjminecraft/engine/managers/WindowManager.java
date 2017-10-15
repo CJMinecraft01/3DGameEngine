@@ -32,8 +32,8 @@ public class WindowManager implements IManager {
 
 	@Override
 	public void preInit() throws Exception {
-		this.width = Integer.valueOf(Engine.getOption("width"));
-		this.height = Integer.valueOf(Engine.getOption("height"));
+		this.width = Integer.parseInt(Engine.getOption("width"));
+		this.height = Integer.parseInt(Engine.getOption("height"));
 		this.title = Engine.getOption("title");
 
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -62,6 +62,8 @@ public class WindowManager implements IManager {
 		glfwShowWindow(this.windowId);
 
 		GL.createCapabilities();
+		
+		glClearColor(0, 0, 0, 1);
 	}
 
 	@Override
@@ -75,6 +77,7 @@ public class WindowManager implements IManager {
 	@Override
 	public void loop() throws Exception {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glfwPollEvents();
 	}
 
 	@Override

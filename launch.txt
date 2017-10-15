@@ -10,4 +10,9 @@ width:1280
 height:720
 resizable:false
 title:#format(window.title)
-textures.location=assets/textures
+textures.location:assets/textures
+models.location:assets/models
+##Camera options
+fov:70
+far_plane:2500
+near_plane:0.4

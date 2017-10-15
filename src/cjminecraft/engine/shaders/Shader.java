@@ -29,15 +29,6 @@ public abstract class Shader {
 
 	/**
 	 * A simple shader. To add a shader, simply create a new text file saving it
-	 * the name of the shader with the file extension of .glsl <br>
-	 * Example: <code>fragment.glsl</code>
-	 */
-	public Shader(String... attributes) {
-		this("", attributes);
-	}
-
-	/**
-	 * A simple shader. To add a shader, simply create a new text file saving it
 	 * the name of the shader with the prefix on the start, ensuring the name of
 	 * the shader has the first letter capitalised and with the file extension
 	 * of .glsl <br>
@@ -45,6 +36,8 @@ public abstract class Shader {
 	 * 
 	 * @param shaderPrefix
 	 *            The prefix before the name of the shader
+	 * @param attributes
+	 *            The attributes to bind
 	 */
 	public Shader(String shaderPrefix, String... attributes) {
 		this.programId = glCreateProgram();
@@ -60,7 +53,7 @@ public abstract class Shader {
 						+ ".glsl";
 				if (Class.class.getResourceAsStream(filePath) != null) {
 					this.shaders.put(type, loadShader(filePath, type.getType()));
-					System.out.println(new Exception().getStackTrace()[1].getClassName().substring(37)
+					System.out.println(Class.forName(new Exception().getStackTrace()[1].getClassName()).getSimpleName()
 							+ ": Found Shader: " + type.getName());
 				}
 			} catch (Exception e) {
@@ -100,7 +93,7 @@ public abstract class Shader {
 	 */
 	protected void storeAllUniformLocations(UniformVariable<?>... variables) {
 		storeSomeUniformLocations(variables);
-		glValidateProgram(this.programId);
+		validateProgram();
 	}
 
 	/**

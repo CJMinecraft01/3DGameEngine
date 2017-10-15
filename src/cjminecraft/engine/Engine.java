@@ -12,6 +12,8 @@ import org.lwjgl.Version;
 import cjminecraft.engine.loaders.LanguageLoader;
 import cjminecraft.engine.loaders.TextureLoader;
 import cjminecraft.engine.loaders.VaoLoader;
+import cjminecraft.engine.managers.CameraManager;
+import cjminecraft.engine.managers.ObjectManager;
 import cjminecraft.engine.managers.WindowManager;
 import cjminecraft.engine.util.ILaunchClass;
 import cjminecraft.engine.util.IManager;
@@ -47,6 +49,7 @@ public class Engine implements IManager, ILaunchClass {
 	 *             Allow any exception to be thrown
 	 */
 	public static void main(String[] args) throws Exception {
+		System.setProperty("org.lwjgl.util.Debug", "true");
 		LanguageLoader.loadLanguage("en_UK"); //Load the boot up language
 		System.out.println("LWJGL Version: " + Version.getVersion());
 		//Load the launch file
@@ -89,6 +92,8 @@ public class Engine implements IManager, ILaunchClass {
 	public void addManagers() {
 		System.out.println("Adding Managers");
 		addManager(WindowManager.getInstance());
+		addManager(CameraManager.getInstance());
+		addManager(ObjectManager.getInstance());
 	}
 
 	@Override
@@ -121,7 +126,7 @@ public class Engine implements IManager, ILaunchClass {
 			for (IManager manager : managers) {
 				manager.loop();
 			}
-
+			
 			glfwSwapBuffers(WindowManager.getInstance().getWindowId());
 			glfwPollEvents();
 		}
