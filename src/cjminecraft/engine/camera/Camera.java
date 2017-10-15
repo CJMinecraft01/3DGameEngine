@@ -44,17 +44,19 @@ public class Camera extends GameObject implements ICamera {
 	@Override
 	public void move() {
 		updateViewMatrix();
+		//getData(DataType.TRANSORMATION_DATA).increaseRotation(1, 1, 1);
 	}
 
 	private void updateViewMatrix() {
-		this.viewMatrix.zero();
+		//this.viewMatrix = new Matrix4f();
+		//this.viewMatrix.zero();
 		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().y),
 				new Vector3f(1, 0, 0)); // Pitch
 		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().z),
 				new Vector3f(0, 1, 0)); // Yaw
 		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().x),
 				new Vector3f(0, 0, 1)); // Roll
-		Vector3f negativeCameraPos = getData(DataType.TRANSORMATION_DATA).getPosition().negate(new Vector3f());
+		Vector3f negativeCameraPos = getData(DataType.TRANSORMATION_DATA).getPosition().negate();
 		this.viewMatrix.translate(negativeCameraPos);
 
 	}

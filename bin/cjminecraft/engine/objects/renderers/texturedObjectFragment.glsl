@@ -14,7 +14,7 @@ void main(void) {
 	if (textureColour.a == 0) {
 		discard;
 	}
-	gl_FragColor = textureColour;
+	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 	out_Colour = textureColour;
 
 }
