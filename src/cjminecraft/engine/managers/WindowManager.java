@@ -62,7 +62,7 @@ public class WindowManager implements IManager {
 		glfwShowWindow(this.windowId);
 
 		GL.createCapabilities();
-		
+
 		glClearColor(0, 0, 0, 1);
 	}
 
@@ -77,7 +77,15 @@ public class WindowManager implements IManager {
 	@Override
 	public void loop() throws Exception {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glfwPollEvents();
+		
+		/*
+		glBegin(GL_QUADS);
+		glVertex2d(-0.5F, 0.5F);
+		glVertex2d(0.5F, 0.5F);
+		glVertex2d(0.5F, -0.5F);
+		glVertex2d(-0.5F, -0.5F);
+		glEnd();
+		*/
 	}
 
 	@Override

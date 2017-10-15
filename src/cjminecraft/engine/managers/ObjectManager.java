@@ -32,7 +32,7 @@ public class ObjectManager implements IManager {
 
 	@Override
 	public void loop() throws Exception {
-		this.texturedObjectRenderer.render(this.object, CameraManager.getInstance().getCamera());
+		//this.texturedObjectRenderer.render(this.object, CameraManager.getInstance().getCamera());
 	}
 
 	@Override
