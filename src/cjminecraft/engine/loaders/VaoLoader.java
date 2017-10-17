@@ -97,6 +97,23 @@ public class VaoLoader {
 	 * 
 	 * @param positions
 	 *            The positions to load
+	 * @param indices
+	 *            The order of each point from the positions
+	 * @return The {@link VertexData} containing all the vertex information
+	 */
+	public static VertexData loadToVAO(float[] positions, int[] indices) {
+		int vaoId = createVAO();
+		storeDataInAttributeList(0, 3, positions);
+		bindIndicesBuffer(indices);
+		unbindVAO();
+		return new VertexData(vaoId, indices.length);
+	}
+
+	/**
+	 * Load positions to a VAO
+	 * 
+	 * @param positions
+	 *            The positions to load
 	 * @param dimensions
 	 *            The dimensions of the positions (<i>E.g. a world position
 	 *            would be an example of a 3D array so 3 but a 2D screen
