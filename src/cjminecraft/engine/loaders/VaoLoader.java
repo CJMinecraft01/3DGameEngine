@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL11.*;
+import static cjminecraft.engine.util.GLError.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,9 @@ public class VaoLoader {
 	 */
 	public static void cleanUp() {
 		for (int vao : vaos)
-			glDeleteVertexArrays(vao);
+			glCall(() -> glDeleteVertexArrays(vao));
 		for (int vbo : vbos)
-			glDeleteBuffers(vbo);
+			glCall(() -> glDeleteBuffers(vbo));
 	}
 
 	/**
@@ -44,9 +45,10 @@ public class VaoLoader {
 	 * @return The id of the VAO
 	 */
 	private static int createVAO() {
-		int vaoId = glGenBuffers();
+		int vaoId = glCallT(() -> glGenVertexArrays());
+		System.out.println(vaoId + " " + new Exception().getStackTrace()[2].getClassName());
 		vaos.add(vaoId);
-		glBindVertexArray(vaoId);
+		glCall(() -> glBindVertexArray(vaoId));
 		return vaoId;
 	}
 
@@ -54,7 +56,7 @@ public class VaoLoader {
 	 * Unbind a VAO
 	 */
 	private static void unbindVAO() {
-		glBindVertexArray(0);
+		glCall(() -> glBindVertexArray(0));
 	}
 
 	/**
@@ -70,12 +72,12 @@ public class VaoLoader {
 	 *            The data to store
 	 */
 	private static void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
-		int vboId = glGenBuffers();
+		int vboId = glCallT(() -> glGenBuffers());
 		vbos.add(vboId);
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
-		glVertexAttribPointer(attributeNumber, coordinateSize, GL_FLOAT, false, 0, 0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, vboId));
+		glCall(() -> glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW));
+		glCall(() -> glVertexAttribPointer(attributeNumber, coordinateSize, GL_FLOAT, false, 0, 0));
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, 0));
 	}
 
 	/**
@@ -86,10 +88,10 @@ public class VaoLoader {
 	 *            positions are etc.</i>)
 	 */
 	private static void bindIndicesBuffer(int[] indices) {
-		int vboId = glGenBuffers();
+		int vboId = glCallT(() -> glGenBuffers());
 		vbos.add(vboId);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+		glCall(() -> glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId));
+		glCall(() -> glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW));
 	}
 
 	/**
@@ -203,11 +205,11 @@ public class VaoLoader {
 	 * @return The id of the VBO
 	 */
 	public static int createEmptyVbo(int floatCount) {
-		int vbo = glGenBuffers();
+		int vbo = glCallT(() -> glGenBuffers());
 		vbos.add(vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, floatCount * 4, GL_STREAM_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, vbo));
+		glCall(() -> glBufferData(GL_ARRAY_BUFFER, floatCount * 4, GL_STREAM_DRAW));
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, 0));
 		return vbo;
 	}
 
@@ -229,11 +231,11 @@ public class VaoLoader {
 	 */
 	public static void addInstancedAttrivute(int vao, int vbo, int attribute, int dataSize, int instancedDataLength,
 			int offset) {
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBindVertexArray(vao);
-		glVertexAttribPointer(attribute, dataSize, GL_FLOAT, false, instancedDataLength * 4, offset * 4);
-		glVertexAttribDivisor(GL_ARRAY_BUFFER, 1);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, vbo));
+		glCall(() -> glBindVertexArray(vao));
+		glCall(() -> glVertexAttribPointer(attribute, dataSize, GL_FLOAT, false, instancedDataLength * 4, offset * 4));
+		glCall(() -> glVertexAttribDivisor(GL_ARRAY_BUFFER, 1));
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, 0));
 		unbindVAO();
 	}
 
@@ -246,10 +248,10 @@ public class VaoLoader {
 	 *            The data to give to the VBO
 	 */
 	public static void updateVbo(int vbo, float[] data) {
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, data.length * 4, GL_STATIC_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, data);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, vbo));
+		glCall(() -> glBufferData(GL_ARRAY_BUFFER, data.length * 4, GL_STATIC_DRAW));
+		glCall(() -> glBufferSubData(GL_ARRAY_BUFFER, 0, data));
+		glCall(() -> glBindBuffer(GL_ARRAY_BUFFER, 0));
 	}
 
 }

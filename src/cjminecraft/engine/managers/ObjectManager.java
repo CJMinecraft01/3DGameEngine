@@ -1,5 +1,7 @@
 package cjminecraft.engine.managers;
 
+import org.lwjgl.opengl.GL11;
+
 import cjminecraft.engine.loaders.obj.OBJLoader;
 import cjminecraft.engine.objects.GameObject;
 import cjminecraft.engine.objects.data.TextureData;
@@ -27,8 +29,8 @@ public class ObjectManager implements IManager {
 
 	@Override
 	public void init() throws Exception {
-		//this.object = new GameObject().attach(OBJLoader.loadOBJ("barrel"))
-		//		.attach(new TransformationData(10, 10, 10, 0, 0, 0, 1, 1, 1)).attach(new TextureData("barrel"));
+		this.object = new GameObject().attach(OBJLoader.loadOBJ("barrel"))
+				.attach(new TransformationData(10, 10, 10, 0, 0, 0, 1, 1, 1)).attach(new TextureData("barrel"));
 	}
 
 	@Override
@@ -38,6 +40,7 @@ public class ObjectManager implements IManager {
 	@Override
 	public void loop() throws Exception {
 		testRenderer.render();
+		//System.out.println(GL11.glGetError());
 		//this.texturedObjectRenderer.render(this.object, CameraManager.getInstance().getCamera());
 	}
 
