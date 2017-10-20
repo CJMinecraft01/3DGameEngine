@@ -77,6 +77,7 @@ public class OBJLoader {
 		float[] normalsArray = new float[vertices.size() * 3];
 		float[] tangentsArray = new float[vertices.size() * 3];
 		int[] indicesArray = convertIndicesListToArray(indices);
+		
 		return VaoLoader.loadToVAO(verticesArray, texturesArray, normalsArray, tangentsArray, indicesArray);
 	}
 

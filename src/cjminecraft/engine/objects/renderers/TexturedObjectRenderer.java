@@ -2,8 +2,6 @@ package cjminecraft.engine.objects.renderers;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 import java.util.List;
 
@@ -15,6 +13,7 @@ import cjminecraft.engine.objects.data.TransformationData;
 import cjminecraft.engine.util.IRenderer;
 import cjminecraft.engine.util.Maths;
 import cjminecraft.engine.util.OpenGLUtils;
+import cjminecraft.engine.util.opengl.Vao;
 
 public class TexturedObjectRenderer implements IRenderer<GameObject> {
 	
@@ -50,10 +49,9 @@ public class TexturedObjectRenderer implements IRenderer<GameObject> {
 	private void prepareObject(GameObject object) {
 		TransformationData transformation = object.getData(DataType.TRANSORMATION_DATA);
 		TexturedObjectShader.TRANSFORMATION_MATRIX.loadValue(Maths.createTransformationMatrix(transformation));
-		glBindVertexArray(object.getData(DataType.VERTEX_DATA).getVaoId());
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
+		Vao vao = object.getData(DataType.VERTEX_DATA).getVao();
+		vao.bind();
+		vao.enableAttributes();
 		TextureData texture = object.getData(DataType.TEXTURE_DATA);
 		TexturedObjectShader.MODEL_TEXTURE.loadValue(texture.getTextureId());
 		if(texture.hasTransparency())
@@ -64,10 +62,8 @@ public class TexturedObjectRenderer implements IRenderer<GameObject> {
 	
 	private void unbindObject(GameObject object) {
 		OpenGLUtils.enableCulling();
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-		glBindVertexArray(0);
+		Vao vao = object.getData(DataType.VERTEX_DATA).getVao();
+		vao.disableAttributes();
 	}
 
 }

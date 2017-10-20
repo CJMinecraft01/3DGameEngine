@@ -40,7 +40,6 @@ public class ObjectManager implements IManager {
 	@Override
 	public void loop() throws Exception {
 		testRenderer.render();
-		//System.out.println(GL11.glGetError());
 		//this.texturedObjectRenderer.render(this.object, CameraManager.getInstance().getCamera());
 	}
 

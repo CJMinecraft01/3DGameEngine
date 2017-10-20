@@ -44,7 +44,10 @@ public class WindowManager implements IManager {
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE, Boolean.valueOf(Engine.getOption("resizable")) ? GLFW_TRUE : GLFW_FALSE);
-
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		
 		this.windowId = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 		if (this.windowId == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
@@ -60,7 +63,7 @@ public class WindowManager implements IManager {
 		glfwSwapInterval(1);
 
 		glfwShowWindow(this.windowId);
-
+		
 		GL.createCapabilities();
 
 		glClearColor(0, 0, 0, 1);

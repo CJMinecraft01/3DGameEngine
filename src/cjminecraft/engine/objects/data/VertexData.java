@@ -1,21 +1,23 @@
 package cjminecraft.engine.objects.data;
 
+import cjminecraft.engine.util.opengl.Vao;
+
 public class VertexData extends Data {
 
-	private int vaoId;
+	private Vao vao;
 	private int vertexCount;
 
-	public VertexData(int vaoId, int vertexCount) {
-		this.vaoId = vaoId;
+	public VertexData(Vao vao, int vertexCount) {
+		this.vao = vao;
 		this.vertexCount = vertexCount;
 	}
 
-	public int getVaoId() {
-		return vaoId;
+	public Vao getVao() {
+		return this.vao;
 	}
 
 	public int getVertexCount() {
-		return vertexCount;
+		return this.vertexCount;
 	}
 
 	@Override
@@ -26,7 +28,7 @@ public class VertexData extends Data {
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof VertexData
-				? ((VertexData) obj).vaoId == this.vaoId && ((VertexData) obj).vertexCount == this.vertexCount : false;
+				? ((VertexData) obj).vao.id == this.vao.id && ((VertexData) obj).vertexCount == this.vertexCount : false;
 	}
 
 }

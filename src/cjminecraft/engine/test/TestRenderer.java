@@ -4,8 +4,6 @@ import java.util.Random;
 
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 import cjminecraft.engine.loaders.VaoLoader;
 import cjminecraft.engine.objects.data.VertexData;
@@ -72,17 +70,17 @@ public class TestRenderer {
 		}
 		TestShader.COLOUR.loadValue(new Vector3f(colourR, colourG, colourB));
 		//System.out.println(GL11.glGetError());
-		GL30.glBindVertexArray(data1.getVaoId());
-		GL20.glEnableVertexAttribArray(0);
+		data1.getVao().bind();
+		data1.getVao().enableAttributes();
 		GL11.glDrawElements(GL11.GL_TRIANGLES, data1.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-		GL20.glDisableVertexAttribArray(0);
+		data1.getVao().disableAttributes();
+		data1.getVao().unbind();
 		
-		GL30.glBindVertexArray(0);
-		GL30.glBindVertexArray(data2.getVaoId());
-		GL20.glEnableVertexAttribArray(0);
+		data2.getVao().bind();
+		data2.getVao().enableAttributes();
 		GL11.glDrawElements(GL11.GL_TRIANGLES, data2.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-		GL20.glDisableVertexAttribArray(0);
-		GL30.glBindVertexArray(0);
+		data2.getVao().disableAttributes();
+		data2.getVao().unbind();
 		this.shader.stop();
 	}
 
