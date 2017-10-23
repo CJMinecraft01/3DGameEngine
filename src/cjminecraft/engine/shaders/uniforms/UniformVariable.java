@@ -1,6 +1,7 @@
 package cjminecraft.engine.shaders.uniforms;
 
 import static org.lwjgl.opengl.GL20.*;
+import static cjminecraft.engine.util.GLError.glCallT;;
 
 /**
  * Represents a uniform variable in a shader file
@@ -32,7 +33,7 @@ public abstract class UniformVariable<T> {
 	 * @return The updated uniform variable
 	 */
 	public UniformVariable<T> linkToProgram(int programId) {
-		this.id = glGetUniformLocation(programId, this.name);
+		this.id = glCallT(() -> glGetUniformLocation(programId, this.name));
 		return this;
 	}
 	

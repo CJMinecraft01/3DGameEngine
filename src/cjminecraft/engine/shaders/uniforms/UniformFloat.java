@@ -1,6 +1,7 @@
 package cjminecraft.engine.shaders.uniforms;
 
 import static org.lwjgl.opengl.GL20.glUniform1f;
+import static cjminecraft.engine.util.GLError.glCall;
 
 /**
  * Represents a uniform variable in a shader file which has a float value
@@ -23,7 +24,7 @@ public class UniformFloat extends UniformVariable<Float> {
 
 	@Override
 	public UniformVariable<Float> loadValue(Float value) {
-		glUniform1f(this.id, value);
+		glCall(() -> glUniform1f(this.id, value));
 		return this;
 	}
 

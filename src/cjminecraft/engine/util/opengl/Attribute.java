@@ -1,18 +1,20 @@
 package cjminecraft.engine.util.opengl;
 
-import static cjminecraft.engine.util.GLError.*;
+import static cjminecraft.engine.util.GLError.glCall;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 public class Attribute {
-	
+
 	protected final int attributeNumber;
 	protected final int dataType;
 	protected final boolean normalised;
 	protected final int componentCount;
 	protected final int bytesPerVertex;
-	
+
 	public Attribute(int attributeNumber, int dataType, int componentCount) {
 		this.attributeNumber = attributeNumber;
 		this.dataType = dataType;
@@ -20,7 +22,7 @@ public class Attribute {
 		this.normalised = false;
 		this.bytesPerVertex = calcBytesPerVertex();
 	}
-	
+
 	public Attribute(int attributeNumber, int dataType, int componentCount, boolean normalised) {
 		this.attributeNumber = attributeNumber;
 		this.dataType = dataType;
@@ -28,20 +30,22 @@ public class Attribute {
 		this.normalised = normalised;
 		this.bytesPerVertex = calcBytesPerVertex();
 	}
-	
-	protected void enable(boolean enable) {
-		if(enable)
-			glCall(() -> glEnableVertexAttribArray(this.attributeNumber));
-		else
-			glCall(() -> glDisableVertexAttribArray(this.attributeNumber));
+
+	protected void enable() {
+		glCall(() -> glEnableVertexAttribArray(this.attributeNumber));
 	}
-	
+
+	protected void disable() {
+		glCall(() -> glDisableVertexAttribArray(this.attributeNumber));
+	}
+
 	protected void link(int offset, int stride) {
-		glCall(() -> glVertexAttribPointer(this.attributeNumber, this.componentCount, this.dataType, this.normalised, stride, offset));
+		glCall(() -> glVertexAttribPointer(this.attributeNumber, this.componentCount, this.dataType, this.normalised,
+				stride, offset));
 	}
-	
+
 	private int calcBytesPerVertex() {
-		switch(this.dataType) {
+		switch (this.dataType) {
 		case GL_FLOAT:
 		case GL_UNSIGNED_INT:
 		case GL_INT:

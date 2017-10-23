@@ -1,6 +1,7 @@
 package cjminecraft.engine.shaders.uniforms;
 
 import static org.lwjgl.opengl.GL20.glUniform1f;
+import static cjminecraft.engine.util.GLError.glCall;
 
 /**
  * Represents a uniform variable in a shader file which has a boolean value
@@ -23,7 +24,7 @@ public class UniformBoolean extends UniformVariable<Boolean> {
 
 	@Override
 	public UniformVariable<Boolean> loadValue(Boolean value) {
-		glUniform1f(this.id, value ? 1 : 0);
+		glCall(() -> glUniform1f(this.id, value ? 1 : 0));
 		return this;
 	}
 

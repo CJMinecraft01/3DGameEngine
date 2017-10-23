@@ -1,6 +1,7 @@
 package cjminecraft.engine.shaders.uniforms;
 
 import static org.lwjgl.opengl.GL20.glUniform3f;
+import static cjminecraft.engine.util.GLError.glCall;
 
 import org.joml.Vector3f;
 
@@ -26,7 +27,7 @@ public class UniformVec3 extends UniformVariable<Vector3f> {
 
 	@Override
 	public UniformVariable<Vector3f> loadValue(Vector3f value) {
-		glUniform3f(this.id, value.x, value.y, value.z);
+		glCall(() -> glUniform3f(this.id, value.x, value.y, value.z));
 		return this;
 	}
 

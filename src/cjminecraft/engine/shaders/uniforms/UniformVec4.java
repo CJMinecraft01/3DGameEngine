@@ -3,6 +3,7 @@ package cjminecraft.engine.shaders.uniforms;
 import static org.lwjgl.opengl.GL20.glUniform4f;
 
 import org.joml.Vector4f;
+import static cjminecraft.engine.util.GLError.glCall;
 
 /**
  * Represents a uniform variable in a shader file which has a {@link Vector4f}
@@ -26,7 +27,7 @@ public class UniformVec4 extends UniformVariable<Vector4f> {
 
 	@Override
 	public UniformVariable<Vector4f> loadValue(Vector4f value) {
-		glUniform4f(this.id, value.x, value.y, value.z, value.w);
+		glCall(() -> glUniform4f(this.id, value.x, value.y, value.z, value.w));
 		return this;
 	}
 

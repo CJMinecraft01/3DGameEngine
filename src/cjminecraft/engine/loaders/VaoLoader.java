@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cjminecraft.engine.objects.data.VertexData;
-import cjminecraft.engine.util.opengl.Attribute;
 import cjminecraft.engine.util.opengl.Vao;
 import cjminecraft.engine.util.opengl.Vbo;
 
@@ -58,7 +57,7 @@ public class VaoLoader {
 	 */
 	public static VertexData loadToVAO(float[] positions, int[] indices) {
 		Vao vao = createVAO();
-		vao.initDataFeed(positions, GL_STATIC_DRAW, new Attribute(0, GL_FLOAT, 3));
+		vao.storeData(0, 3, positions, GL_STATIC_DRAW);
 		vao.createIndexBuffer(indices);
 		vao.unbind();
 		return new VertexData(vao, indices.length);
@@ -77,7 +76,7 @@ public class VaoLoader {
 	 */
 	public static VertexData loadToVAO(float[] positions, int dimensions) {
 		Vao vao = createVAO();
-		vao.initDataFeed(positions, GL_STATIC_DRAW, new Attribute(0, GL_FLOAT, dimensions));
+		vao.storeData(0, dimensions, positions, GL_STATIC_DRAW);
 		vao.unbind();
 		return new VertexData(vao, positions.length / dimensions);
 	}
@@ -93,8 +92,8 @@ public class VaoLoader {
 	 */
 	public static VertexData loadToVAO(float[] positions, float[] textureCoords) {
 		Vao vao = createVAO();
-		vao.initDataFeed(positions, GL_STATIC_DRAW, new Attribute(0, GL_FLOAT, 2));
-		vao.initDataFeed(textureCoords, GL_STATIC_DRAW, new Attribute(1, GL_FLOAT, 2));
+		vao.storeData(0, 2, positions, GL_STATIC_DRAW);
+		vao.storeData(1, 2, textureCoords, GL_STATIC_DRAW);
 		vao.unbind();
 		return new VertexData(vao, positions.length / 2);
 	}
@@ -115,9 +114,9 @@ public class VaoLoader {
 	public static VertexData loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
 		Vao vao = createVAO();
 		vao.createIndexBuffer(indices);
-		vao.initDataFeed(positions, GL_STATIC_DRAW, new Attribute(0, GL_FLOAT, 3));
-		vao.initDataFeed(textureCoords, GL_STATIC_DRAW, new Attribute(1, GL_FLOAT, 2));
-		vao.initDataFeed(normals, GL_STATIC_DRAW, new Attribute(2, GL_FLOAT, 3));
+		vao.storeData(0, 3, positions, GL_STATIC_DRAW);
+		vao.storeData(1, 2, textureCoords, GL_STATIC_DRAW);
+		vao.storeData(2, 3, normals, GL_STATIC_DRAW);
 		vao.unbind();
 		return new VertexData(vao, indices.length);
 	}
@@ -142,10 +141,10 @@ public class VaoLoader {
 			int[] indices) {
 		Vao vao = createVAO();
 		vao.createIndexBuffer(indices);
-		vao.initDataFeed(positions, GL_STATIC_DRAW, new Attribute(0, GL_FLOAT, 3));
-		vao.initDataFeed(textureCoords, GL_STATIC_DRAW, new Attribute(1, GL_FLOAT, 2));
-		vao.initDataFeed(normals, GL_STATIC_DRAW, new Attribute(2, GL_FLOAT, 3));
-		vao.initDataFeed(tangents, GL_STATIC_DRAW, new Attribute(3, GL_FLOAT, 3));
+		vao.storeData(0, 3, positions, GL_STATIC_DRAW);
+		vao.storeData(1, 2, textureCoords, GL_STATIC_DRAW);
+		vao.storeData(2, 3, normals, GL_STATIC_DRAW);
+		vao.storeData(3, 3, tangents, GL_STATIC_DRAW);
 		vao.unbind();
 		return new VertexData(vao, indices.length);
 	}
@@ -166,7 +165,7 @@ public class VaoLoader {
 	 * @param offset
 	 *            The offset of the data
 	 */
-	public static void addInstancedAttrivute(Vao vao, Vbo vbo, int attribute, int dataSize, int instancedDataLength,
+	public static void addInstancedAttribute(Vao vao, Vbo vbo, int attribute, int dataSize, int instancedDataLength,
 			int offset) {
 		vbo.bind();
 		vao.bind();
@@ -174,21 +173,6 @@ public class VaoLoader {
 		glCall(() -> glVertexAttribDivisor(GL_ARRAY_BUFFER, 1));
 		vbo.unbind();
 		vao.unbind();
-	}
-
-	/**
-	 * Update the given VBO with the given data
-	 * 
-	 * @param vbo
-	 *            The VBO to update
-	 * @param data
-	 *            The data to give to the VBO
-	 */
-	public static void updateVbo(Vbo vbo, float[] data) {
-		vbo.bind();
-		vbo.allocateData(data.length * 4);
-		vbo.storeData(0, data);
-		vbo.unbind();
 	}
 
 }
