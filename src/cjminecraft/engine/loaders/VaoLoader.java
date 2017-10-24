@@ -58,9 +58,9 @@ public class VaoLoader {
 	public static VertexData loadToVAO(float[] positions, int[] indices) {
 		Vao vao = createVAO();
 		vao.storeData(0, 3, positions, GL_STATIC_DRAW);
-		vao.createIndexBuffer(indices);
+		Vbo indexBuffer = vao.createIndexBuffer(indices);
 		vao.unbind();
-		return new VertexData(vao, indices.length);
+		return new VertexData(vao, indexBuffer, indices.length);
 	}
 
 	/**
@@ -113,12 +113,12 @@ public class VaoLoader {
 	 */
 	public static VertexData loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
 		Vao vao = createVAO();
-		vao.createIndexBuffer(indices);
+		Vbo indexBuffer = vao.createIndexBuffer(indices);
 		vao.storeData(0, 3, positions, GL_STATIC_DRAW);
 		vao.storeData(1, 2, textureCoords, GL_STATIC_DRAW);
 		vao.storeData(2, 3, normals, GL_STATIC_DRAW);
 		vao.unbind();
-		return new VertexData(vao, indices.length);
+		return new VertexData(vao, indexBuffer, indices.length);
 	}
 
 	/**
@@ -140,13 +140,13 @@ public class VaoLoader {
 	public static VertexData loadToVAO(float[] positions, float[] textureCoords, float[] normals, float[] tangents,
 			int[] indices) {
 		Vao vao = createVAO();
-		vao.createIndexBuffer(indices);
+		Vbo indexBuffer = vao.createIndexBuffer(indices);
 		vao.storeData(0, 3, positions, GL_STATIC_DRAW);
 		vao.storeData(1, 2, textureCoords, GL_STATIC_DRAW);
 		vao.storeData(2, 3, normals, GL_STATIC_DRAW);
 		vao.storeData(3, 3, tangents, GL_STATIC_DRAW);
 		vao.unbind();
-		return new VertexData(vao, indices.length);
+		return new VertexData(vao, indexBuffer, indices.length);
 	}
 
 	/**
