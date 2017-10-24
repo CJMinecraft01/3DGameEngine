@@ -6,10 +6,15 @@ out vec3 pass_colour;
 
 uniform vec3 colour;
 
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+//uniform mat4 transformationMatrix;
+
 void main(void) {
 
-	pass_colour = colour;
+	//vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
+	gl_Position = viewMatrix * vec4(position, 1.0) * projectionMatrix;
 
-	gl_Position = vec4(position, 1.0);
+	pass_colour = colour;
 
 }

@@ -54,7 +54,6 @@ public class WindowManager implements IManager {
 
 		try (MemoryStack stack = stackPush()) {
 			GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
 			glfwSetWindowPos(this.windowId, (vidmode.width() - this.width) / 2, (vidmode.height() - this.height) / 2);
 		}
 

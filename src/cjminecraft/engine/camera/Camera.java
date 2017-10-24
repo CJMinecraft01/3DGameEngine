@@ -58,7 +58,6 @@ public class Camera extends GameObject implements ICamera {
 				new Vector3f(0, 0, 1)); // Roll
 		Vector3f negativeCameraPos = getData(DataType.TRANSORMATION_DATA).getPosition().negate();
 		this.viewMatrix.translate(negativeCameraPos);
-
 	}
 
 	@Override
@@ -84,14 +83,14 @@ public class Camera extends GameObject implements ICamera {
 		float xScale = yScale / aspectRatio;
 		float frustrumLength = Float.valueOf(Engine.getOption("far_plane"))
 				- Float.valueOf(Engine.getOption("near_plane"));
-
+		
 		projectionMatrix.m00(xScale);
 		projectionMatrix.m11(yScale);
 		projectionMatrix
 				.m22(-((Float.valueOf(Engine.getOption("far_plane")) + Float.valueOf(Engine.getOption("near_plane")))
 						/ frustrumLength));
 		projectionMatrix.m23(-1);
-		projectionMatrix.m21(
+		projectionMatrix.m32(
 				-((2F * Float.valueOf(Engine.getOption("far_plane")) * Float.valueOf(Engine.getOption("near_plane")))
 						/ frustrumLength));
 		projectionMatrix.m33(0);

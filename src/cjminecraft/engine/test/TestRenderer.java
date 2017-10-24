@@ -2,22 +2,12 @@ package cjminecraft.engine.test;
 
 import java.util.Random;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL42;
-import org.lwjgl.opengl.GL44;
 
 import cjminecraft.engine.loaders.VaoLoader;
+import cjminecraft.engine.managers.CameraManager;
 import cjminecraft.engine.objects.data.VertexData;
 
 public class TestRenderer {
@@ -25,15 +15,37 @@ public class TestRenderer {
 	private TestShader shader;
 	
 	private float[] vertices = {
-			-0.5f, 0.5f, 0,
-			-0.5f, -0.5f, 0,
-			0.5f, -0.5f, 0,
-			0.5f, 0.5f, 0
+		    // front
+		    -1.0F, -1.0F,  1.0F,
+		     1.0F, -1.0F,  1.0F,
+		     1.0F,  1.0F,  1.0F,
+		    -1.0F,  1.0F,  1.0F,
+		    // back
+		    -1.0F, -1.0F, -1.0F,
+		     1.0F, -1.0F, -1.0F,
+		     1.0F,  1.0F, -1.0F,
+		    -1.0F,  1.0F, -1.0F,
 		};
 	
 	private int[] indices = {
-			0,1,3,
-			3,1,2
+			// front
+			0, 1, 2,
+			2, 3, 0,
+			// top
+			1, 5, 6,
+			6, 2, 1,
+			// back
+			7, 6, 5,
+			5, 4, 7,
+			// bottom
+			4, 0, 3,
+			3, 7, 4,
+			// left
+			4, 5, 1,
+			1, 0, 4,
+			// right
+			3, 2, 6,
+			6, 7, 3,
 		};
 	
 	private float colourR = 1, colourG = 1, colourB = 1;
@@ -41,7 +53,6 @@ public class TestRenderer {
 	
 	private VertexData data1;
 	private VertexData data2;
-	
 	
 	private Random random = new Random();
 	
@@ -52,8 +63,8 @@ public class TestRenderer {
 	}
 	
 	public void render() {
-		
 		this.shader.start();
+		/*
 		if(!switchR) {
 			colourR += random.nextFloat() * random.nextFloat() / 30.0F;
 			if(colourR >= 1)
@@ -81,8 +92,12 @@ public class TestRenderer {
 			if(colourB <= 0)
 				switchB = false;
 		}
+		*/
 		TestShader.COLOUR.loadValue(new Vector3f(colourR, colourG, colourB));
+		TestShader.PROJECTION_MATRIX.loadValue(CameraManager.getInstance().getCamera().getProjectionMatrix().invert());
+		TestShader.VIEW_MATRIX.loadValue(CameraManager.getInstance().getCamera().getViewMatrix());
 		//System.out.println(GL11.glGetError());
+		
 		data1.getVao().bind();
 		data1.getVao().enableAttributes();
 		data1.getIndexBuffer().bind();
