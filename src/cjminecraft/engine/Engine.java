@@ -1,6 +1,9 @@
 package cjminecraft.engine;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.glfw.Callbacks.*;
 
 import java.nio.file.*;
@@ -98,7 +101,7 @@ public class Engine implements IManager, ILaunchClass {
 
 	@Override
 	public void preInit() throws Exception {
-		for (IManager manager : managers) {
+		for (IManager manager : this.managers) {
 			System.out.println(manager.getClass().getSimpleName() + " pre init");
 			manager.preInit();
 		}
@@ -106,7 +109,7 @@ public class Engine implements IManager, ILaunchClass {
 
 	@Override
 	public void init() throws Exception {
-		for (IManager manager : managers) {
+		for (IManager manager : this.managers) {
 			System.out.println(manager.getClass().getSimpleName() + " init");
 			manager.init();
 		}
@@ -114,7 +117,7 @@ public class Engine implements IManager, ILaunchClass {
 
 	@Override
 	public void postInit() throws Exception {
-		for (IManager manager : managers) {
+		for (IManager manager : this.managers) {
 			System.out.println(manager.getClass().getSimpleName() + " post init");
 			manager.postInit();
 		}
@@ -123,7 +126,9 @@ public class Engine implements IManager, ILaunchClass {
 	@Override
 	public void loop() throws Exception {
 		while (!glfwWindowShouldClose(WindowManager.getInstance().getWindowId())) {
-			for (IManager manager : managers) {
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
+			for (IManager manager : this.managers) {
 				manager.loop();
 			}
 			

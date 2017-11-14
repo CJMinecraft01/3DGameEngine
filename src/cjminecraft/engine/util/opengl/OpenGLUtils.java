@@ -1,4 +1,4 @@
-package cjminecraft.engine.util;
+package cjminecraft.engine.util.opengl;
 
 import static org.lwjgl.opengl.GL11.*;
 

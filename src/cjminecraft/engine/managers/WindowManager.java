@@ -44,9 +44,9 @@ public class WindowManager implements IManager {
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE, Boolean.valueOf(Engine.getOption("resizable")) ? GLFW_TRUE : GLFW_FALSE);
-//		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-//		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-//		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		
 		this.windowId = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 		if (this.windowId == NULL)
@@ -78,7 +78,7 @@ public class WindowManager implements IManager {
 
 	@Override
 	public void loop() throws Exception {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
 		
 		/*
 		glBegin(GL_QUADS);

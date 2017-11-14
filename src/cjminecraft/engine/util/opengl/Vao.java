@@ -57,7 +57,7 @@ public class Vao {
 	}
 
 	public Vbo storeData(int attribute, int componentCount, float[] data, int usage, boolean normalised) {
-		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, usage);
 		this.relatedVbos.add(vbo);
 		vbo.bind();
 		vbo.allocateData(data);
@@ -69,7 +69,7 @@ public class Vao {
 	}
 
 	public Vbo storeData(int attribute, int componentCount, int[] data, int usage, boolean normalised) {
-		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, usage);
 		this.relatedVbos.add(vbo);
 		vbo.bind();
 		vbo.allocateData(data);
@@ -81,7 +81,7 @@ public class Vao {
 	}
 	
 	public Vbo storeData(int attribute, int componentCount, float[] data, int usage) {
-		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, usage);
 		this.relatedVbos.add(vbo);
 		vbo.bind();
 		vbo.allocateData(data);
@@ -93,7 +93,7 @@ public class Vao {
 	}
 
 	public Vbo storeData(int attribute, int componentCount, int[] data, int usage) {
-		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+		Vbo vbo = Vbo.create(GL_ARRAY_BUFFER, usage);
 		this.relatedVbos.add(vbo);
 		vbo.bind();
 		vbo.allocateData(data);

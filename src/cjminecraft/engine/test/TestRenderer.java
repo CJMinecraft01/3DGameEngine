@@ -1,5 +1,9 @@
 package cjminecraft.engine.test;
 
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
+
 import java.util.Random;
 
 import org.joml.Matrix4f;
@@ -11,93 +15,88 @@ import cjminecraft.engine.managers.CameraManager;
 import cjminecraft.engine.objects.data.VertexData;
 
 public class TestRenderer {
-	
+
 	private TestShader shader;
-	
+
 	private float[] vertices = {
-		    // front
-		    -1.0F, -1.0F,  1.0F,
-		     1.0F, -1.0F,  1.0F,
-		     1.0F,  1.0F,  1.0F,
-		    -1.0F,  1.0F,  1.0F,
-		    // back
-		    -1.0F, -1.0F, -1.0F,
-		     1.0F, -1.0F, -1.0F,
-		     1.0F,  1.0F, -1.0F,
-		    -1.0F,  1.0F, -1.0F,
-		};
-	
-	private int[] indices = {
-			// front
-			0, 1, 2,
-			2, 3, 0,
-			// top
-			1, 5, 6,
-			6, 2, 1,
-			// back
-			7, 6, 5,
-			5, 4, 7,
-			// bottom
-			4, 0, 3,
-			3, 7, 4,
-			// left
-			4, 5, 1,
-			1, 0, 4,
-			// right
-			3, 2, 6,
-			6, 7, 3,
-		};
-	
+			// Front face
+			-1.0F, -1.0F, 1.0F, 1.0F, -1.0F, 1.0F, 1.0F, 1.0F, 1.0F, -1.0F, 1.0F, 1.0F,
+
+			// Back face
+			-1.0F, -1.0F, -1.0F, -1.0F, 1.0F, -1.0F, 1.0F, 1.0F, -1.0F, 1.0F, -1.0F, -1.0F,
+
+			// Top face
+			-1.0F, 1.0F, -1.0F, -1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, -1.0F,
+
+			// Bottom face
+			-1.0F, -1.0F, -1.0F, 1.0F, -1.0F, -1.0F, 1.0F, -1.0F, 1.0F, -1.0F, -1.0F, 1.0F,
+
+			// Right face
+			1.0F, -1.0F, -1.0F, 1.0F, 1.0F, -1.0F, 1.0F, 1.0F, 1.0F, 1.0F, -1.0F, 1.0F,
+
+			// Left face
+			-1.0F, -1.0F, -1.0F, -1.0F, -1.0F, 1.0F, -1.0F, 1.0F, 1.0F, -1.0F, 1.0F, -1.0F, };
+
+	private int[] indices = { 0, 1, 2, 0, 2, 3, // front
+			4, 5, 6, 4, 6, 7, // back
+			8, 9, 10, 8, 10, 11, // top
+			12, 13, 14, 12, 14, 15, // bottom
+			16, 17, 18, 16, 18, 19, // right
+			20, 21, 22, 20, 22, 23, // left
+	};
+
 	private float colourR = 1, colourG = 1, colourB = 1;
 	private boolean switchR, switchG, switchB;
-	
+
 	private VertexData data1;
 	private VertexData data2;
-	
+
 	private Random random = new Random();
-	
+
 	public TestRenderer() {
 		this.shader = new TestShader();
 		this.data1 = VaoLoader.loadToVAO(vertices, indices);
-		//this.data2 = VaoLoader.loadToVAO(new float[] { -1, -1, -1, -1, -0.5f, -1, -0.5f, -1, -0.5f }, new int[] { 1, 2, 3 });
+		// this.data2 = VaoLoader.loadToVAO(new float[] { -1, -1, -1, -1, -0.5f,
+		// -1, -0.5f, -1, -0.5f },
+		// new int[] { 1, 2, 3 });
 	}
-	
+
 	public void render() {
 		this.shader.start();
-		/*
-		if(!switchR) {
+
+		if (!switchR) {
 			colourR += random.nextFloat() * random.nextFloat() / 30.0F;
-			if(colourR >= 1)
+			if (colourR >= 1)
 				switchR = true;
 		} else {
 			colourR -= random.nextFloat() * random.nextFloat() / 30.0F;
-			if(colourR <= 0)
+			if (colourR <= 0)
 				switchR = false;
 		}
-		if(!switchG) {
+		if (!switchG) {
 			colourG += random.nextFloat() * random.nextFloat() / 30.0F;
-			if(colourR >= 1)
+			if (colourR >= 1)
 				switchG = true;
 		} else {
 			colourG -= random.nextFloat() * random.nextFloat() / 30.0F;
-			if(colourG <= 0)
+			if (colourG <= 0)
 				switchG = false;
 		}
-		if(!switchB) {
+		if (!switchB) {
 			colourB += random.nextFloat() * random.nextFloat() / 30.0F;
-			if(colourB >= 1)
+			if (colourB >= 1)
 				switchB = true;
 		} else {
 			colourB -= random.nextFloat() * random.nextFloat() / 30.0F;
-			if(colourB <= 0)
+			if (colourB <= 0)
 				switchB = false;
 		}
-		*/
+
 		TestShader.COLOUR.loadValue(new Vector3f(colourR, colourG, colourB));
-		TestShader.PROJECTION_MATRIX.loadValue(CameraManager.getInstance().getCamera().getProjectionMatrix().invert());
+		TestShader.PROJECTION_MATRIX.loadValue(CameraManager.getInstance().getCamera().getProjectionMatrix());
 		TestShader.VIEW_MATRIX.loadValue(CameraManager.getInstance().getCamera().getViewMatrix());
-		//System.out.println(GL11.glGetError());
-		
+		// System.out.println(GL11.glGetError());
+
 		data1.getVao().bind();
 		data1.getVao().enableAttributes();
 		data1.getIndexBuffer().bind();
