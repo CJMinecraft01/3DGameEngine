@@ -16,7 +16,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class Camera extends GameObject implements ICamera {
 
 	public static final float MOVEMENT_AMOUNT = 1F;
-	
+
 	private Matrix4f projectionMatrix;
 	private Matrix4f viewMatrix = new Matrix4f();
 
@@ -24,40 +24,47 @@ public class Camera extends GameObject implements ICamera {
 		attach(new TransformationData(0, 0, 0, 0, 0, 0, 0, 0, 0));
 		updateViewMatrix();
 		this.projectionMatrix = createProjectionMatrix();
-//		glfwSetKeyCallback(WindowManager.getInstance().getWindowId(), (window, key, scancode, action, mods) -> {
-//			if(key == GLFW_KEY_A && action == GLFW_PRESS)
-//				getData(DataType.TRANSORMATION_DATA).increasePositionX(-MOVEMENT_AMOUNT);
-//			if(key == GLFW_KEY_D && action == GLFW_PRESS)
-//				getData(DataType.TRANSORMATION_DATA).increasePositionX(MOVEMENT_AMOUNT);
-//			if(key == GLFW_KEY_W && action == GLFW_PRESS)
-//				getData(DataType.TRANSORMATION_DATA).increasePositionZ(-MOVEMENT_AMOUNT);
-//			if(key == GLFW_KEY_S && action == GLFW_PRESS)
-//				getData(DataType.TRANSORMATION_DATA).increasePositionZ(MOVEMENT_AMOUNT);
-//			if(key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
-//				getData(DataType.TRANSORMATION_DATA).increasePositionY(-MOVEMENT_AMOUNT);
-//			if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-//				getData(DataType.TRANSORMATION_DATA).increasePositionY(MOVEMENT_AMOUNT);
-//			if(key == GLFW_KEY_P && action == GLFW_PRESS)
-//				OpenGLUtils.toggleWireframeMode();
-//		});
+		// glfwSetKeyCallback(WindowManager.getInstance().getWindowId(),
+		// (window, key, scancode, action, mods) -> {
+		// if(key == GLFW_KEY_A && action == GLFW_PRESS)
+		// getData(DataType.TRANSORMATION_DATA).increasePositionX(-MOVEMENT_AMOUNT);
+		// if(key == GLFW_KEY_D && action == GLFW_PRESS)
+		// getData(DataType.TRANSORMATION_DATA).increasePositionX(MOVEMENT_AMOUNT);
+		// if(key == GLFW_KEY_W && action == GLFW_PRESS)
+		// getData(DataType.TRANSORMATION_DATA).increasePositionZ(-MOVEMENT_AMOUNT);
+		// if(key == GLFW_KEY_S && action == GLFW_PRESS)
+		// getData(DataType.TRANSORMATION_DATA).increasePositionZ(MOVEMENT_AMOUNT);
+		// if(key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
+		// getData(DataType.TRANSORMATION_DATA).increasePositionY(-MOVEMENT_AMOUNT);
+		// if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+		// getData(DataType.TRANSORMATION_DATA).increasePositionY(MOVEMENT_AMOUNT);
+		// if(key == GLFW_KEY_P && action == GLFW_PRESS)
+		// OpenGLUtils.toggleWireframeMode();
+		// });
 	}
 
 	@Override
 	public void move() {
 		updateViewMatrix();
-		if(Keyboard.isKeyDown(GLFW_KEY_A))
-			getData(DataType.TRANSORMATION_DATA).increasePositionX(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
-		if(Keyboard.isKeyDown(GLFW_KEY_D))
-			getData(DataType.TRANSORMATION_DATA).increasePositionX(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
-		if(Keyboard.isKeyDown(GLFW_KEY_W))
-			getData(DataType.TRANSORMATION_DATA).increasePositionZ(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
-		if(Keyboard.isKeyDown(GLFW_KEY_S))
-			getData(DataType.TRANSORMATION_DATA).increasePositionZ(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
-		if(Keyboard.isKeyDown(GLFW_KEY_LEFT_SHIFT))
-			getData(DataType.TRANSORMATION_DATA).increasePositionY(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
-		if(Keyboard.isKeyDown(GLFW_KEY_SPACE))
-			getData(DataType.TRANSORMATION_DATA).increasePositionY(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
-		if(Keyboard.isKeyDown(GLFW_KEY_P))
+		if (Keyboard.isKeyDown(GLFW_KEY_A))
+			getData(DataType.TRANSORMATION_DATA)
+					.increasePositionX(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if (Keyboard.isKeyDown(GLFW_KEY_D))
+			getData(DataType.TRANSORMATION_DATA)
+					.increasePositionX(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if (Keyboard.isKeyDown(GLFW_KEY_W))
+			getData(DataType.TRANSORMATION_DATA)
+					.increasePositionZ(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if (Keyboard.isKeyDown(GLFW_KEY_S))
+			getData(DataType.TRANSORMATION_DATA)
+					.increasePositionZ(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if (Keyboard.isKeyDown(GLFW_KEY_LEFT_SHIFT))
+			getData(DataType.TRANSORMATION_DATA)
+					.increasePositionY(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if (Keyboard.isKeyDown(GLFW_KEY_SPACE))
+			getData(DataType.TRANSORMATION_DATA)
+					.increasePositionY(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if (Keyboard.isKeyDown(GLFW_KEY_P))
 			OpenGLUtils.toggleWireframeMode();
 	}
 
@@ -67,7 +74,7 @@ public class Camera extends GameObject implements ICamera {
 		this.viewMatrix.m11(1.0F);
 		this.viewMatrix.m22(1.0F);
 		this.viewMatrix.m33(1.0F);
-		
+
 		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().x),
 				new Vector3f(1, 0, 0)); // Pitch
 		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().y),
@@ -95,24 +102,10 @@ public class Camera extends GameObject implements ICamera {
 
 	private static Matrix4f createProjectionMatrix() {
 		Matrix4f projectionMatrix = new Matrix4f();
-		float aspectRatio = (float) WindowManager.getInstance().getWidth()
-				/ (float) WindowManager.getInstance().getHeight();
-		float yScale = (float) ((1.0F / Math.tan(Math.toRadians(Float.valueOf(Engine.getOption("fov")) / 2.0F))));
-		float xScale = yScale / aspectRatio;
-		float frustrumLength = Float.valueOf(Engine.getOption("far_plane"))
-				- Float.valueOf(Engine.getOption("near_plane"));
-		
-		projectionMatrix.m00(xScale);
-		projectionMatrix.m11(yScale);
-		projectionMatrix
-				.m22(-((Float.valueOf(Engine.getOption("far_plane")) + Float.valueOf(Engine.getOption("near_plane")))
-						/ frustrumLength));
-		projectionMatrix.m23(-1);
-		projectionMatrix.m32(
-				-((2.0F * Float.valueOf(Engine.getOption("far_plane")) * Float.valueOf(Engine.getOption("near_plane")))
-						/ frustrumLength));
-		projectionMatrix.m33(0);
-		return projectionMatrix.invert();
+		projectionMatrix.perspective(Float.valueOf(Engine.getOption("fov")),
+				(float) WindowManager.getInstance().getWidth() / (float) WindowManager.getInstance().getHeight(),
+				Float.valueOf(Engine.getOption("near_plane")), Float.valueOf(Engine.getOption("far_plane")));
+		return projectionMatrix;
 	}
 
 }
