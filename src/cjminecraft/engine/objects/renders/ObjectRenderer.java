@@ -10,6 +10,7 @@ import cjminecraft.engine.objects.renders.coloured.ColouredShader;
 import cjminecraft.engine.objects.renders.textured.TexturedShader;
 import cjminecraft.engine.util.IRenderer;
 import cjminecraft.engine.util.Maths;
+import cjminecraft.engine.util.opengl.OpenGLUtils;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -35,33 +36,45 @@ public class ObjectRenderer implements IRenderer<GameObject> {
 			ColouredShader.PROJECTION_MATRIX.loadValue(camera.getProjectionMatrix());
 			ColouredShader.VIEW_MATRIX.loadValue(camera.getViewMatrix());
 			ColouredShader.TRANSFORMATION_MATRIX.loadValue(Maths.createTransformationMatrix(object.getData(DataType.TRANSORMATION_DATA)));
+			this.colouredShader.stop();
 			
 			VertexData vertexData = object.getData(DataType.VERTEX_DATA);
 			vertexData.getVao().bind();
-			vertexData.getVao().enableAttributes();
+			vertexData.getVao().enableAttributes(0);
 			vertexData.getIndexBuffer().bind();
+			
+			if(object.getData(DataType.COLOUR_DATA).getColour().w != 0)
+				OpenGLUtils.disableCulling();
+			
 			glCall(() -> glDrawElements(GL_TRIANGLES, vertexData.getVertexCount(), GL_UNSIGNED_INT, 0));
+			
 			vertexData.getIndexBuffer().unbind();
-			vertexData.getVao().disableAttributes();
+			vertexData.getVao().disableAttributes(0);
 			vertexData.getVao().unbind();
-			this.colouredShader.stop();
 		} else if(object.hasData(DataType.TEXTURE_DATA)) {
 			this.texturedShader.start();
-			VertexData vertexData = object.getData(DataType.VERTEX_DATA);
-			vertexData.getVao().bind();
-			vertexData.getVao().enableAttributes();
-			vertexData.getIndexBuffer().bind();
-			glCall(() -> glActiveTexture(GL_TEXTURE0));
-			glCall(() -> glBindTexture(GL_TEXTURE_2D, object.getData(DataType.TEXTURE_DATA).getTextureId()));
 			TexturedShader.MODEL_TEXTURE.loadValue(object.getData(DataType.TEXTURE_DATA).getTextureId());
 			TexturedShader.PROJECTION_MATRIX.loadValue(camera.getProjectionMatrix());
 			TexturedShader.VIEW_MATRIX.loadValue(camera.getViewMatrix());
 			TexturedShader.TRANSFORMATION_MATRIX.loadValue(Maths.createTransformationMatrix(object.getData(DataType.TRANSORMATION_DATA)));
-			glCall(() -> glDrawElements(GL_TRIANGLES, vertexData.getVertexCount(), GL_UNSIGNED_INT, 0));
-			vertexData.getIndexBuffer().unbind();
-			vertexData.getVao().disableAttributes();
-			vertexData.getVao().unbind();
 			this.texturedShader.stop();
+			
+			VertexData vertexData = object.getData(DataType.VERTEX_DATA);
+			vertexData.getVao().bind();
+			vertexData.getVao().enableAttributes(0, 1);
+			vertexData.getIndexBuffer().bind();
+			
+			if(object.getData(DataType.TEXTURE_DATA).hasTransparency())
+				OpenGLUtils.disableCulling();
+			
+			glCall(() -> glActiveTexture(GL_TEXTURE0));
+			glCall(() -> glBindTexture(GL_TEXTURE_2D, object.getData(DataType.TEXTURE_DATA).getTextureId()));
+			
+			glCall(() -> glDrawElements(GL_TRIANGLES, vertexData.getVertexCount(), GL_UNSIGNED_INT, 0));
+			
+			vertexData.getIndexBuffer().unbind();
+			vertexData.getVao().disableAttributes(0, 1);
+			vertexData.getVao().unbind();
 		}
 	}
 

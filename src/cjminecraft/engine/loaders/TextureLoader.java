@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL14.*;
+import static cjminecraft.engine.util.opengl.GLError.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -43,7 +44,7 @@ public class TextureLoader {
 	 */
 	public static void cleanUp() {
 		for (int texture : textures)
-			glDeleteTextures(texture);
+			glCall(() -> glDeleteTextures(texture));
 	}
 
 	/**
@@ -71,21 +72,21 @@ public class TextureLoader {
 		buffer.flip();
 
 		int textureId = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0f);
+		glCall(() -> glBindTexture(GL_TEXTURE_2D, textureId));
+		glCall(() -> glGenerateMipmap(GL_TEXTURE_2D));
+		glCall(() -> glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+		glCall(() -> glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+		glCall(() -> glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		glCall(() -> glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		glCall(() -> glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0f));
 		if (GL.getCapabilities().GL_EXT_texture_filter_anisotropic) {
 			float amount = Math.min(4F, glGetFloat(EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT));
-			glTexParameterf(GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, amount);
+			glCall(() -> glTexParameterf(GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, amount));
 		} else {
 			System.out.println("Anisotropic is not supported!");
 		}
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-				buffer);
+		glCall(() -> glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+				buffer));
 		textures.add(textureId);
 		return textureId;
 	}

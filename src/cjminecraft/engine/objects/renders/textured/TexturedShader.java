@@ -9,7 +9,7 @@ public class TexturedShader extends Shader {
 	public static final UniformMat4 TRANSFORMATION_MATRIX = new UniformMat4("transformationMatrix");
 	public static final UniformMat4 VIEW_MATRIX = new UniformMat4("viewMatrix");
 	public static final UniformMat4 PROJECTION_MATRIX = new UniformMat4("projectionMatrix");
-	public static final UniformSampler2D MODEL_TEXTURE = new UniformSampler2D("modelTextre");
+	public static final UniformSampler2D MODEL_TEXTURE = new UniformSampler2D("modelTexture");
 	
 	public TexturedShader() {
 		super("", "position", "textureCoordinates");

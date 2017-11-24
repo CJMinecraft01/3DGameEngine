@@ -9,6 +9,7 @@ import cjminecraft.engine.objects.data.TransformationData;
 import cjminecraft.engine.objects.renders.ObjectRenderer;
 import cjminecraft.engine.test.TestRenderer;
 import cjminecraft.engine.util.IManager;
+import cjminecraft.engine.util.opengl.OpenGLUtils;
 
 public class ObjectManager implements IManager {
 
@@ -29,7 +30,7 @@ public class ObjectManager implements IManager {
 	@Override
 	public void init() throws Exception {
 		this.object = new GameObject().attach(OBJLoader.loadOBJ("barrel"))
-				.attach(new TransformationData(0, 0, 0, 0, 0, 0, 1, 1, 1)).attach(new TextureData("barrel"));
+				.attach(new TransformationData(0, 0, -10, 0, 0, 0, 1, 1, 1)).attach(new TextureData("barrel"));
 	}
 
 	@Override
@@ -39,6 +40,7 @@ public class ObjectManager implements IManager {
 	@Override
 	public void loop() throws Exception {
 		//testRenderer.render();
+		OpenGLUtils.enableCulling();
 		this.objectRenderer.render(this.object, CameraManager.getInstance().getCamera());
 	}
 

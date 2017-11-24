@@ -15,7 +15,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Camera extends GameObject implements ICamera {
 
-	public static final float MOVEMENT_AMOUNT = 1F;
+	public static final float MOVEMENT_AMOUNT = 2F;
 
 	private Matrix4f projectionMatrix;
 	private Matrix4f viewMatrix = new Matrix4f();
@@ -64,7 +64,7 @@ public class Camera extends GameObject implements ICamera {
 		if (Keyboard.isKeyDown(GLFW_KEY_SPACE))
 			getData(DataType.TRANSORMATION_DATA)
 					.increasePositionY(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
-		if (Keyboard.isKeyDown(GLFW_KEY_P))
+		if (Keyboard.isKeyDown(GLFW_KEY_P, true))
 			OpenGLUtils.toggleWireframeMode();
 	}
 
