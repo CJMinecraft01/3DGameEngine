@@ -1,7 +1,7 @@
 package cjminecraft.engine.shaders.uniforms;
 
+import static cjminecraft.engine.util.opengl.GLError.glCall;
 import static org.lwjgl.opengl.GL20.glUniform3f;
-import static cjminecraft.engine.util.GLError.glCall;
 
 import org.joml.Vector3f;
 

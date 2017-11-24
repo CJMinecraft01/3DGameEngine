@@ -8,12 +8,12 @@ uniform vec3 colour;
 
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
-//uniform mat4 transformationMatrix;
+uniform mat4 transformationMatrix;
 
 void main(void) {
 
 	//vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
-	gl_Position = viewMatrix * vec4(position, 1.0) * projectionMatrix;
+	gl_Position = viewMatrix * vec4(position, 1.0) * projectionMatrix * transformationMatrix;
 
 	pass_colour = colour;
 

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.joml.Vector2f;
@@ -18,9 +19,8 @@ import cjminecraft.engine.objects.data.VertexData;
 public class OBJLoader {
 
 	public static VertexData loadOBJ(String fileName) {
-		fileName = Engine.getOption("models.location") + "/" + fileName + ".obj";
 		FileReader fr = null;
-		File objFile = new File(fileName);
+		File objFile = new File(Engine.getOption("models.location") + "/" + fileName + ".obj");
 		try {
 			fr = new FileReader(objFile);
 		} catch (FileNotFoundException e) {
@@ -38,18 +38,18 @@ public class OBJLoader {
 				line = reader.readLine();
 				if (line.startsWith("v ")) {
 					String[] currentLine = line.split(" ");
-					Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
-							Float.parseFloat(currentLine[3]));
+					Vector3f vertex = new Vector3f((float) Float.valueOf(currentLine[1]), (float) Float.valueOf(currentLine[2]),
+							(float) Float.valueOf(currentLine[3]));
 					Vertex newVertex = new Vertex(vertices.size(), vertex);
 					vertices.add(newVertex);
 				} else if (line.startsWith("vt ")) {
 					String[] currentLine = line.split(" ");
-					Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]));
+					Vector2f texture = new Vector2f((float) Float.valueOf(currentLine[1]), (float) Float.valueOf(currentLine[2]));
 					textures.add(texture);
 				} else if (line.startsWith("vn ")) {
 					String[] currentLine = line.split(" ");
-					Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
-							Float.valueOf(currentLine[3]));
+					Vector3f normal = new Vector3f((float) Float.valueOf(currentLine[1]), (float) Float.valueOf(currentLine[2]),
+							(float) Float.valueOf(currentLine[3]));
 					normals.add(normal);
 				} else if (line.startsWith("f ")) {
 					break;
@@ -60,10 +60,12 @@ public class OBJLoader {
 				String[] vertex1 = currentLine[1].split("/");
 				String[] vertex2 = currentLine[2].split("/");
 				String[] vertex3 = currentLine[3].split("/");
+				// Must call process vertex otherwise nothing is drawn
 				Vertex v0 = processVertex(vertex1, vertices, indices);
 				Vertex v1 = processVertex(vertex2, vertices, indices);
 				Vertex v2 = processVertex(vertex3, vertices, indices);
-				calculateTangents(v0, v1, v2, textures);
+				// calculateTangents(v0, v1, v2, textures);
+				// Cannot call calculate tangents as it adds new vertices
 				line = reader.readLine();
 			}
 			reader.close();
@@ -76,7 +78,14 @@ public class OBJLoader {
 		float[] texturesArray = new float[vertices.size() * 2];
 		float[] normalsArray = new float[vertices.size() * 3];
 		float[] tangentsArray = new float[vertices.size() * 3];
+		convertDataToArrays(vertices, textures, normals, verticesArray,
+				texturesArray, normalsArray, tangentsArray);
 		int[] indicesArray = convertIndicesListToArray(indices);
+		
+		/*
+		for(float tangent : tangentsArray)
+			System.out.println(tangent);
+		*/
 		
 		return VaoLoader.loadToVAO(verticesArray, texturesArray, normalsArray, tangentsArray, indicesArray);
 	}
@@ -142,8 +151,36 @@ public class OBJLoader {
 				indices.add(duplicateVertex.getIndex());
 				return duplicateVertex;
 			}
+		}
+	}
+	
+	private static float convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
+			List<Vector3f> normals, float[] verticesArray, float[] texturesArray,
+			float[] normalsArray, float[] tangentsArray) {
+		float furthestPoint = 0;
+		for (int i = 0; i < vertices.size(); i++) {
+			Vertex currentVertex = vertices.get(i);
+			if (currentVertex.getLength() > furthestPoint) {
+				furthestPoint = currentVertex.getLength();
+			}
+			Vector3f position = currentVertex.getPosition();
+			Vector2f textureCoord = textures.get(currentVertex.getTextureIndex());
+			Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
+			Vector3f tangent = currentVertex.getAverageTangent();
+			verticesArray[i * 3] = position.x;
+			verticesArray[i * 3 + 1] = position.y;
+			verticesArray[i * 3 + 2] = position.z;
+			texturesArray[i * 2] = textureCoord.x;
+			texturesArray[i * 2 + 1] = 1 - textureCoord.y;
+			normalsArray[i * 3] = normalVector.x;
+			normalsArray[i * 3 + 1] = normalVector.y;
+			normalsArray[i * 3 + 2] = normalVector.z;
+			tangentsArray[i * 3] = tangent.x;
+			tangentsArray[i * 3 + 1] = tangent.y;
+			tangentsArray[i * 3 + 2] = tangent.z;
 
 		}
+		return furthestPoint;
 	}
 
 	private static void removeUnusedVertices(List<Vertex> vertices) {

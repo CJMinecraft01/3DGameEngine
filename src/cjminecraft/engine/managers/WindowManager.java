@@ -25,6 +25,9 @@ public class WindowManager implements IManager {
 	 * The instance of the manager
 	 */
 	private static WindowManager instance = new WindowManager();
+	
+	private static long lastFrameTime;
+	private static float delta;
 
 	private long windowId;
 	private String title;
@@ -78,7 +81,11 @@ public class WindowManager implements IManager {
 
 	@Override
 	public void loop() throws Exception {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+		long currentFrameTime = getCurrentTime();
+		delta = (currentFrameTime - lastFrameTime) / 1000f;
+		lastFrameTime = currentFrameTime;
 		
 		/*
 		glBegin(GL_QUADS);
@@ -88,10 +95,19 @@ public class WindowManager implements IManager {
 		glVertex2d(-0.5F, -0.5F);
 		glEnd();
 		*/
+		
 	}
 
 	@Override
 	public void cleanUp() throws Exception {
+	}
+	
+	public static float getFrameTimeSeconds() {
+		return delta;
+	}
+	
+	private static long getCurrentTime() {
+		return System.nanoTime() / 1000000L;
 	}
 
 	/**

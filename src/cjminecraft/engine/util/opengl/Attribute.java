@@ -1,6 +1,6 @@
 package cjminecraft.engine.util.opengl;
 
-import static cjminecraft.engine.util.GLError.glCall;
+import static cjminecraft.engine.util.opengl.GLError.glCall;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL20.*;

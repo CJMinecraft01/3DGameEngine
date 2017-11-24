@@ -1,9 +1,9 @@
 package cjminecraft.engine.shaders.uniforms;
 
+import static cjminecraft.engine.util.opengl.GLError.glCall;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 import org.joml.Matrix4f;
-import static cjminecraft.engine.util.GLError.glCall;
 
 /**
  * Represents a uniform variable in a shader file which has a {@link Matrix4f}

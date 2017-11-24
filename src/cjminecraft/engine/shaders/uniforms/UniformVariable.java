@@ -1,7 +1,7 @@
 package cjminecraft.engine.shaders.uniforms;
 
-import static org.lwjgl.opengl.GL20.*;
-import static cjminecraft.engine.util.GLError.glCallT;;
+import static cjminecraft.engine.util.opengl.GLError.glCallT;
+import static org.lwjgl.opengl.GL20.*;;
 
 /**
  * Represents a uniform variable in a shader file

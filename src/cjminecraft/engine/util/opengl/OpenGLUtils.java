@@ -16,10 +16,13 @@ public class OpenGLUtils {
 	}
 	
 	public static void toggleWireframeMode() {
-		if(wireframe)
+		if(wireframe) {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		else
+			wireframe = false;
+		} else {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			wireframe = true;
+		}
 	}
 
 }

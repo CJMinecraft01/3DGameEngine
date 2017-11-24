@@ -6,9 +6,8 @@ import java.util.List;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL15.*;
+import static cjminecraft.engine.util.opengl.GLError.*;
 import static org.lwjgl.opengl.GL11.*;
-
-import static cjminecraft.engine.util.GLError.*;
 
 public class Vao {
 

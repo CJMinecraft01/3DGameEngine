@@ -3,8 +3,8 @@ package cjminecraft.engine.loaders;
 import static org.lwjgl.opengl.GL33.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL15.*;
+import static cjminecraft.engine.util.opengl.GLError.*;
 import static org.lwjgl.opengl.GL11.*;
-import static cjminecraft.engine.util.GLError.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,13 +8,14 @@ import cjminecraft.engine.managers.WindowManager;
 import cjminecraft.engine.objects.GameObject;
 import cjminecraft.engine.objects.data.DataType;
 import cjminecraft.engine.objects.data.TransformationData;
+import cjminecraft.engine.util.Keyboard;
 import cjminecraft.engine.util.opengl.OpenGLUtils;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Camera extends GameObject implements ICamera {
 
-	public static final float MOVEMENT_AMOUNT = 0.1F;
+	public static final float MOVEMENT_AMOUNT = 1F;
 	
 	private Matrix4f projectionMatrix;
 	private Matrix4f viewMatrix = new Matrix4f();
@@ -23,37 +24,55 @@ public class Camera extends GameObject implements ICamera {
 		attach(new TransformationData(0, 0, 0, 0, 0, 0, 0, 0, 0));
 		updateViewMatrix();
 		this.projectionMatrix = createProjectionMatrix();
-		glfwSetKeyCallback(WindowManager.getInstance().getWindowId(), (window, key, scancode, action, mods) -> {
-			if(key == GLFW_KEY_A && action == GLFW_PRESS)
-				getData(DataType.TRANSORMATION_DATA).increasePositionX(-MOVEMENT_AMOUNT);
-			if(key == GLFW_KEY_D && action == GLFW_PRESS)
-				getData(DataType.TRANSORMATION_DATA).increasePositionX(MOVEMENT_AMOUNT);
-			if(key == GLFW_KEY_W && action == GLFW_PRESS)
-				getData(DataType.TRANSORMATION_DATA).increasePositionZ(-MOVEMENT_AMOUNT);
-			if(key == GLFW_KEY_S && action == GLFW_PRESS)
-				getData(DataType.TRANSORMATION_DATA).increasePositionZ(MOVEMENT_AMOUNT);
-			if(key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
-				getData(DataType.TRANSORMATION_DATA).increasePositionY(-MOVEMENT_AMOUNT);
-			if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-				getData(DataType.TRANSORMATION_DATA).increasePositionY(MOVEMENT_AMOUNT);
-			if(key == GLFW_KEY_P && action == GLFW_PRESS)
-				OpenGLUtils.toggleWireframeMode();
-		});
+//		glfwSetKeyCallback(WindowManager.getInstance().getWindowId(), (window, key, scancode, action, mods) -> {
+//			if(key == GLFW_KEY_A && action == GLFW_PRESS)
+//				getData(DataType.TRANSORMATION_DATA).increasePositionX(-MOVEMENT_AMOUNT);
+//			if(key == GLFW_KEY_D && action == GLFW_PRESS)
+//				getData(DataType.TRANSORMATION_DATA).increasePositionX(MOVEMENT_AMOUNT);
+//			if(key == GLFW_KEY_W && action == GLFW_PRESS)
+//				getData(DataType.TRANSORMATION_DATA).increasePositionZ(-MOVEMENT_AMOUNT);
+//			if(key == GLFW_KEY_S && action == GLFW_PRESS)
+//				getData(DataType.TRANSORMATION_DATA).increasePositionZ(MOVEMENT_AMOUNT);
+//			if(key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
+//				getData(DataType.TRANSORMATION_DATA).increasePositionY(-MOVEMENT_AMOUNT);
+//			if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+//				getData(DataType.TRANSORMATION_DATA).increasePositionY(MOVEMENT_AMOUNT);
+//			if(key == GLFW_KEY_P && action == GLFW_PRESS)
+//				OpenGLUtils.toggleWireframeMode();
+//		});
 	}
 
 	@Override
 	public void move() {
 		updateViewMatrix();
+		if(Keyboard.isKeyDown(GLFW_KEY_A))
+			getData(DataType.TRANSORMATION_DATA).increasePositionX(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if(Keyboard.isKeyDown(GLFW_KEY_D))
+			getData(DataType.TRANSORMATION_DATA).increasePositionX(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if(Keyboard.isKeyDown(GLFW_KEY_W))
+			getData(DataType.TRANSORMATION_DATA).increasePositionZ(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if(Keyboard.isKeyDown(GLFW_KEY_S))
+			getData(DataType.TRANSORMATION_DATA).increasePositionZ(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if(Keyboard.isKeyDown(GLFW_KEY_LEFT_SHIFT))
+			getData(DataType.TRANSORMATION_DATA).increasePositionY(-MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if(Keyboard.isKeyDown(GLFW_KEY_SPACE))
+			getData(DataType.TRANSORMATION_DATA).increasePositionY(MOVEMENT_AMOUNT * WindowManager.getFrameTimeSeconds());
+		if(Keyboard.isKeyDown(GLFW_KEY_P))
+			OpenGLUtils.toggleWireframeMode();
 	}
 
 	private void updateViewMatrix() {
-		//this.viewMatrix = new Matrix4f();
-		//this.viewMatrix.zero();
-		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().y),
-				new Vector3f(1, 0, 0)); // Pitch
-		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().z),
-				new Vector3f(0, 1, 0)); // Yaw
+		this.viewMatrix.zero();
+		this.viewMatrix.m00(1.0F);
+		this.viewMatrix.m11(1.0F);
+		this.viewMatrix.m22(1.0F);
+		this.viewMatrix.m33(1.0F);
+		
 		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().x),
+				new Vector3f(1, 0, 0)); // Pitch
+		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().y),
+				new Vector3f(0, 1, 0)); // Yaw
+		this.viewMatrix.rotate((float) Math.toRadians(getData(DataType.TRANSORMATION_DATA).getRotation().z),
 				new Vector3f(0, 0, 1)); // Roll
 		Vector3f negativeCameraPos = getData(DataType.TRANSORMATION_DATA).getPosition().negate(new Vector3f());
 		this.viewMatrix.translate(negativeCameraPos);
@@ -78,7 +97,7 @@ public class Camera extends GameObject implements ICamera {
 		Matrix4f projectionMatrix = new Matrix4f();
 		float aspectRatio = (float) WindowManager.getInstance().getWidth()
 				/ (float) WindowManager.getInstance().getHeight();
-		float yScale = (float) ((1F / Math.tan(Math.toRadians(Float.valueOf(Engine.getOption("fov")) / 2F))));
+		float yScale = (float) ((1.0F / Math.tan(Math.toRadians(Float.valueOf(Engine.getOption("fov")) / 2.0F))));
 		float xScale = yScale / aspectRatio;
 		float frustrumLength = Float.valueOf(Engine.getOption("far_plane"))
 				- Float.valueOf(Engine.getOption("near_plane"));
@@ -90,7 +109,7 @@ public class Camera extends GameObject implements ICamera {
 						/ frustrumLength));
 		projectionMatrix.m23(-1);
 		projectionMatrix.m32(
-				-((2F * Float.valueOf(Engine.getOption("far_plane")) * Float.valueOf(Engine.getOption("near_plane")))
+				-((2.0F * Float.valueOf(Engine.getOption("far_plane")) * Float.valueOf(Engine.getOption("near_plane")))
 						/ frustrumLength));
 		projectionMatrix.m33(0);
 		return projectionMatrix.invert();

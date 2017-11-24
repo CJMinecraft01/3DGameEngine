@@ -14,5 +14,5 @@ textures.location:assets/textures
 models.location:assets/models
 ##Camera options
 fov:70
-far_plane:5000
-near_plane:0.4
+far_plane:4000
+near_plane:0.1

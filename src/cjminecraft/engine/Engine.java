@@ -1,9 +1,6 @@
 package cjminecraft.engine;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.glfw.Callbacks.*;
 
 import java.nio.file.*;
@@ -20,6 +17,7 @@ import cjminecraft.engine.managers.ObjectManager;
 import cjminecraft.engine.managers.WindowManager;
 import cjminecraft.engine.util.ILaunchClass;
 import cjminecraft.engine.util.IManager;
+import cjminecraft.engine.util.Keyboard;
 
 /**
  * The main class which will do all of the magic!
@@ -105,6 +103,7 @@ public class Engine implements IManager, ILaunchClass {
 			System.out.println(manager.getClass().getSimpleName() + " pre init");
 			manager.preInit();
 		}
+		Keyboard.initialiseKeyboard();
 	}
 
 	@Override
@@ -126,8 +125,6 @@ public class Engine implements IManager, ILaunchClass {
 	@Override
 	public void loop() throws Exception {
 		while (!glfwWindowShouldClose(WindowManager.getInstance().getWindowId())) {
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			
 			for (IManager manager : this.managers) {
 				manager.loop();
 			}

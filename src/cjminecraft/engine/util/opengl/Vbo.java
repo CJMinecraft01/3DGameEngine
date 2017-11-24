@@ -1,12 +1,11 @@
 package cjminecraft.engine.util.opengl;
 
+import static cjminecraft.engine.util.opengl.GLError.*;
 import static org.lwjgl.opengl.GL15.*;
-
-import static cjminecraft.engine.util.GLError.*;
 
 public class Vbo {
 
-	private final int id;
+	public final int id;
 	private final int type;
 	private final int usage;
 

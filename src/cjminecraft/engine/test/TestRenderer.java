@@ -12,13 +12,15 @@ import org.lwjgl.opengl.GL11;
 
 import cjminecraft.engine.loaders.VaoLoader;
 import cjminecraft.engine.managers.CameraManager;
+import cjminecraft.engine.objects.data.TransformationData;
 import cjminecraft.engine.objects.data.VertexData;
+import cjminecraft.engine.util.Maths;
 
 public class TestRenderer {
 
 	private TestShader shader;
 
-	private float[] vertices = {
+	public static float[] vertices = {
 			// Front face
 			-1.0F, -1.0F, 1.0F, 1.0F, -1.0F, 1.0F, 1.0F, 1.0F, 1.0F, -1.0F, 1.0F, 1.0F,
 
@@ -37,7 +39,7 @@ public class TestRenderer {
 			// Left face
 			-1.0F, -1.0F, -1.0F, -1.0F, -1.0F, 1.0F, -1.0F, 1.0F, 1.0F, -1.0F, 1.0F, -1.0F, };
 
-	private int[] indices = { 0, 1, 2, 0, 2, 3, // front
+	public static int[] indices = { 0, 1, 2, 0, 2, 3, // front
 			4, 5, 6, 4, 6, 7, // back
 			8, 9, 10, 8, 10, 11, // top
 			12, 13, 14, 12, 14, 15, // bottom
@@ -49,13 +51,16 @@ public class TestRenderer {
 	private boolean switchR, switchG, switchB;
 
 	private VertexData data1;
-	private VertexData data2;
+	private TransformationData data3;
+	
+	//private VertexData data2;
 
 	private Random random = new Random();
 
 	public TestRenderer() {
 		this.shader = new TestShader();
 		this.data1 = VaoLoader.loadToVAO(vertices, indices);
+		this.data3 = new TransformationData(0, 0, 0, 0, 0, 0, 1, 1, 1);
 		// this.data2 = VaoLoader.loadToVAO(new float[] { -1, -1, -1, -1, -0.5f,
 		// -1, -0.5f, -1, -0.5f },
 		// new int[] { 1, 2, 3 });
@@ -91,10 +96,14 @@ public class TestRenderer {
 			if (colourB <= 0)
 				switchB = false;
 		}
+		
+		this.data3.increaseRotation(0, 0, 0.1F);
 
 		TestShader.COLOUR.loadValue(new Vector3f(colourR, colourG, colourB));
 		TestShader.PROJECTION_MATRIX.loadValue(CameraManager.getInstance().getCamera().getProjectionMatrix());
 		TestShader.VIEW_MATRIX.loadValue(CameraManager.getInstance().getCamera().getViewMatrix());
+		TestShader.TRANSFORMATION_MATRIX.loadValue(Maths.createTransformationMatrix(this.data3));
+		
 		// System.out.println(GL11.glGetError());
 
 		data1.getVao().bind();
