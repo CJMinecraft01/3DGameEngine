@@ -12,6 +12,7 @@ import cjminecraft.engine.shaders.uniforms.UniformVariable;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
+import static cjminecraft.engine.util.opengl.GLError.*;
 
 /**
  * The basic shader class. To add a shader, simply create a new text file saving
@@ -40,7 +41,7 @@ public abstract class Shader {
 	 *            The attributes to bind
 	 */
 	public Shader(String shaderPrefix, String... attributes) {
-		this.programId = glCreateProgram();
+		this.programId = glCallT(() -> glCreateProgram());
 		for (ShaderType type : ShaderType.values()) {
 			try {
 				String filePath = "/"
@@ -61,16 +62,26 @@ public abstract class Shader {
 			}
 		}
 		Iterator<Entry<ShaderType, Integer>> iterator = this.shaders.entrySet().iterator();
-		while (iterator.hasNext())
-			glAttachShader(this.programId, iterator.next().getValue());
+		attachShaders(iterator);
 		bindAttributes(attributes);
-		glLinkProgram(this.programId);
+		glCall(() -> glLinkProgram(this.programId));
 		iterator = this.shaders.entrySet().iterator();
 		while (iterator.hasNext()) {
 			int id = iterator.next().getValue();
-			glDetachShader(this.programId, id);
-			glDeleteShader(id);
+			glCall(() -> glDetachShader(this.programId, id));
+			glCall(() -> glDeleteShader(id));
 		}
+	}
+
+	/**
+	 * Attach the shaders to the program
+	 * 
+	 * @param shaders
+	 *            The shaders iterator
+	 */
+	private void attachShaders(Iterator<Entry<ShaderType, Integer>> shaders) {
+		while (shaders.hasNext())
+			glCall(() -> glAttachShader(this.programId, shaders.next().getValue()));
 	}
 
 	/**
@@ -81,7 +92,19 @@ public abstract class Shader {
 	 */
 	protected void bindAttributes(String... attributes) {
 		for (int i = 0; i < attributes.length; i++)
-			glBindAttribLocation(this.programId, i, attributes[i]);
+			bindAttribute(i, attributes[i]);
+	}
+
+	/**
+	 * Bind an attribute
+	 * 
+	 * @param attribute
+	 *            The index of the attribute
+	 * @param name
+	 *            The name of the attribute
+	 */
+	private void bindAttribute(int attribute, String name) {
+		glCall(() -> glBindAttribLocation(this.programId, attribute, name));
 	}
 
 	/**
@@ -112,21 +135,21 @@ public abstract class Shader {
 	 * Validate the program, saying it is ready to be used
 	 */
 	protected void validateProgram() {
-		glValidateProgram(this.programId);
+		glCall(() -> glValidateProgram(this.programId));
 	}
 
 	/**
 	 * Start the shader
 	 */
 	public void start() {
-		glUseProgram(this.programId);
+		glCall(() -> glUseProgram(this.programId));
 	}
 
 	/**
 	 * Stop the shader
 	 */
 	public void stop() {
-		glUseProgram(0);
+		glCall(() -> glUseProgram(0));
 	}
 
 	/**
@@ -160,12 +183,12 @@ public abstract class Shader {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		int shaderID = glCreateShader(type);
-		glShaderSource(shaderID, shaderSource);
-		glCompileShader(shaderID);
-		if (glGetShaderi(shaderID, GL_COMPILE_STATUS) == GL_FALSE) {
-			System.err.println(
-					"[" + new Exception().getStackTrace()[1].getClassName() + "]" + glGetShaderInfoLog(shaderID, 500));
+		int shaderID = glCallT(() -> glCreateShader(type));
+		glCall(() -> glShaderSource(shaderID, shaderSource));
+		glCall(() -> glCompileShader(shaderID));
+		if (glCallT(() -> glGetShaderi(shaderID, GL_COMPILE_STATUS) == GL_FALSE)) {
+			System.err.println("[" + new Exception().getStackTrace()[1].getClassName() + "]"
+					+ glCallT(() -> glGetShaderInfoLog(shaderID, 500)));
 			System.err.println(
 					new Exception().getStackTrace()[1].getClassName().substring(37) + ": Could not compile shader!");
 			System.exit(-1);

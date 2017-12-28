@@ -60,7 +60,7 @@ public class TestRenderer {
 	public TestRenderer() {
 		this.shader = new TestShader();
 		this.data1 = VaoLoader.loadToVAO(vertices, indices);
-		this.data3 = new TransformationData(0, 0, 0, 0, 0, 0, 1, 1, 1);
+		this.data3 = new TransformationData(0, 0, 0, 0, 0, 0, 0.5F, 0.5F, 0.5F);
 		// this.data2 = VaoLoader.loadToVAO(new float[] { -1, -1, -1, -1, -0.5f,
 		// -1, -0.5f, -1, -0.5f },
 		// new int[] { 1, 2, 3 });
@@ -97,12 +97,11 @@ public class TestRenderer {
 				switchB = false;
 		}
 		
-		this.data3.increaseRotation(0, 0, 0.1F);
 
 		TestShader.COLOUR.loadValue(new Vector3f(colourR, colourG, colourB));
 		TestShader.PROJECTION_MATRIX.loadValue(CameraManager.getInstance().getCamera().getProjectionMatrix());
 		TestShader.VIEW_MATRIX.loadValue(CameraManager.getInstance().getCamera().getViewMatrix());
-		TestShader.TRANSFORMATION_MATRIX.loadValue(Maths.createTransformationMatrix(this.data3));
+		TestShader.TRANSFORMATION_MATRIX.loadValue(this.data3.getTransformationMatrix());
 		
 		// System.out.println(GL11.glGetError());
 

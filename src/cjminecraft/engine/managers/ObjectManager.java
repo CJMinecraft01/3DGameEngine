@@ -29,8 +29,8 @@ public class ObjectManager implements IManager {
 
 	@Override
 	public void init() throws Exception {
-		this.object = new GameObject().attach(OBJLoader.loadOBJ("barrel"))
-				.attach(new TransformationData(0, 0, -10, 0, 0, 0, 1, 1, 1)).attach(new TextureData("barrel"));
+		this.object = new GameObject().attach(OBJLoader.loadOBJ("bunny"))
+				.attach(new TransformationData(0, 0, -10, 0, 0, 0, 1, 1, 1)).attach(new ColourData(0.0F, 1.0F, 0.0F));
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class ObjectManager implements IManager {
 
 	@Override
 	public void loop() throws Exception {
-		//testRenderer.render();
-		OpenGLUtils.enableCulling();
+//		testRenderer.render();
+		//OpenGLUtils.enableCulling();
 		this.objectRenderer.render(this.object, CameraManager.getInstance().getCamera());
 	}
 

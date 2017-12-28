@@ -13,7 +13,7 @@ uniform mat4 transformationMatrix;
 void main(void) {
 
 	//vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
-	gl_Position = viewMatrix * vec4(position, 1.0) * projectionMatrix * transformationMatrix;
+	gl_Position = viewMatrix * vec4(position, 1.0) * transformationMatrix;
 
 	pass_colour = colour;
 

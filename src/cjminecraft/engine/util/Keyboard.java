@@ -3,6 +3,7 @@ package cjminecraft.engine.util;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.lang.reflect.Field;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import org.lwjgl.glfw.GLFW;
@@ -55,7 +56,8 @@ public class Keyboard extends GLFWKeyCallback {
 					keys.put(k, true);
 				} else if (action == GLFW_RELEASE) {
 					keys.put(k, false);
-					keyFlags.put(k, false);
+					if(keyFlags.get(k))
+						keyFlags.put(k, false);
 				}
 			}
 		});

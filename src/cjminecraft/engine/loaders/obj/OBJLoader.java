@@ -61,10 +61,11 @@ public class OBJLoader {
 				String[] vertex2 = currentLine[2].split("/");
 				String[] vertex3 = currentLine[3].split("/");
 				// Must call process vertex otherwise nothing is drawn
+				
 				Vertex v0 = processVertex(vertex1, vertices, indices);
 				Vertex v1 = processVertex(vertex2, vertices, indices);
 				Vertex v2 = processVertex(vertex3, vertices, indices);
-				// calculateTangents(v0, v1, v2, textures);
+				calculateTangents(v0, v1, v2, textures);
 				// Cannot call calculate tangents as it adds new vertices
 				line = reader.readLine();
 			}
@@ -91,13 +92,13 @@ public class OBJLoader {
 	}
 
 	private static void calculateTangents(Vertex v0, Vertex v1, Vertex v2, List<Vector2f> textures) {
-		Vector3f delatPos1 = v1.getPosition().sub(v0.getPosition());
-		Vector3f delatPos2 = v2.getPosition().sub(v0.getPosition());
+		Vector3f delatPos1 = v1.getPosition().sub(v0.getPosition(), new Vector3f());
+		Vector3f delatPos2 = v2.getPosition().sub(v0.getPosition(), new Vector3f());
 		Vector2f uv0 = textures.get(v0.getTextureIndex());
 		Vector2f uv1 = textures.get(v1.getTextureIndex());
 		Vector2f uv2 = textures.get(v2.getTextureIndex());
-		Vector2f deltaUv1 = uv1.sub(uv0);
-		Vector2f deltaUv2 = uv2.sub(uv0);
+		Vector2f deltaUv1 = uv1.sub(uv0, new Vector2f());
+		Vector2f deltaUv2 = uv2.sub(uv0, new Vector2f());
 
 		float r = 1.0f / (deltaUv1.x * deltaUv2.y - deltaUv1.y * deltaUv2.x);
 		delatPos1.mul(deltaUv2.y);

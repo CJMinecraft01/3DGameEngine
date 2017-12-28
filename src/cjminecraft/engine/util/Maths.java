@@ -10,7 +10,7 @@ public class Maths {
 	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {
 		Matrix4f matrix = new Matrix4f();
 		matrix.translate(translation);
-		matrix.rotateXYZ((float) Math.toRadians(rotation.x), (float) Math.toRadians(rotation.y), (float) Math.toRadians(rotation.z));
+		matrix.rotateXYZ(rotation);
 		matrix.scale(scale);
 		return matrix;
 	}

@@ -12,7 +12,7 @@ uniform vec4 colour;
 
 void main(void) {
 
-	gl_Position = viewMatrix * vec4(position, 1.0) * projectionMatrix * transformationMatrix;
+	gl_Position = viewMatrix * vec4(position, 1.0) * transformationMatrix * projectionMatrix;
 	
 	pass_colour = colour;
 
